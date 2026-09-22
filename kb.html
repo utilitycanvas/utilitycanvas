@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<meta name="description" content="Free online tool to resize images to a target file size such as 20KB, 50KB, 100KB, 200KB or 500KB.">
+
+<title>Resize Image to KB - UtilityCanvas</title>
+
+<style>
+*{
+box-sizing:border-box;
+margin:0;
+padding:0
+}
+
+body{
+font-family:Arial,Helvetica,sans-serif;
+background:#f7f8fc;
+color:#172033;
+line-height:1.6
+}
+
+a{
+text-decoration:none;
+color:inherit
+}
+
+.container{
+width:min(900px,92%);
+margin:auto
+}
+
+header{
+background:#fff;
+border-bottom:1px solid #e8eaf0
+}
+
+.nav{
+min-height:70px;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.logo{
+font-size:24px;
+font-weight:800
+}
+
+.logo span{
+color:#635bff
+}
+
+.nav-links{
+display:flex;
+gap:25px;
+font-size:14px;
+color:#596273
+}
+
+.hero{
+padding:60px 0 35px;
+text-align:center;
+background:linear-gradient(180deg,#fff 0%,#f7f8fc 100%)
+}
+
+.hero h1{
+font-size:40px;
+line-height:1.15
+}
+
+.hero h1 span{
+color:#635bff
+}
+
+.hero p{
+max-width:680px;
+margin:18px auto;
+color:#687083
+}
+
+.tool-box{
+background:#fff;
+border:1px solid #e4e7ef;
+border-radius:18px;
+padding:25px;
+margin:25px auto 70px;
+box-shadow:0 8px 30px rgba(20,30,60,.05)
+}
+
+.drop{
+border:2px dashed #d5d8e8;
+border-radius:14px;
+padding:50px 20px;
+text-align:center;
+background:#fafaff
+}
+
+.drop strong{
+display:block;
+font-size:17px;
+margin-bottom:6px
+}
+
+.drop small{
+color:#7b8495
+}
+
+.file-input{
+margin-top:18px;
+width:100%;
+padding:12px;
+border:1px solid #dfe2eb;
+border-radius:9px;
+background:#fff
+}
+
+.controls{
+margin-top:20px
+}
+
+.field label{
+display:block;
+font-size:13px;
+font-weight:700;
+margin-bottom:7px
+}
+
+.field input,
+.field select{
+width:100%;
+padding:12px;
+border:1px solid #dfe2eb;
+border-radius:9px;
+font-size:15px;
+background:#fff
+}
+
+.presets{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:8px;
+margin-top:10px
+}
+
+.preset{
+background:#eef0f7;
+color:#30384a;
+padding:10px 5px;
+border-radius:8px;
+text-align:center;
+font-weight:700;
+cursor:pointer;
+font-size:13px
+}
+
+.preset:hover{
+background:#dddfff
+}
+
+.actions{
+display:flex;
+gap:10px;
+margin-top:20px;
+flex-wrap:wrap
+}
+
+button{
+border:0;
+border-radius:9px;
+padding:12px 18px;
+background:#635bff;
+color:white;
+font-weight:700;
+cursor:pointer
+}
+
+button.secondary{
+background:#eef0f7;
+color:#30384a
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed
+}
+
+.progress{
+margin-top:18px;
+display:none
+}
+
+.progress-bar{
+height:10px;
+background:#eceef5;
+border-radius:20px;
+overflow:hidden
+}
+
+.progress-fill{
+height:100%;
+width:0%;
+background:#635bff;
+transition:width .2s
+}
+
+.progress-text{
+font-size:13px;
+color:#687083;
+margin-top:7px
+}
+
+.result{
+margin-top:20px;
+padding:18px;
+background:#f8f9fd;
+border-radius:12px;
+display:none
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:15px
+}
+
+.stat{
+background:#fff;
+padding:15px;
+border-radius:10px;
+text-align:center
+}
+
+.stat strong{
+display:block;
+font-size:18px
+}
+
+.stat small{
+color:#7b8495
+}
+
+.note{
+margin-top:14px;
+font-size:13px;
+color:#687083
+}
+
+.info{
+padding:50px 0;
+background:#fff
+}
+
+.info h2{
+text-align:center;
+margin-bottom:12px
+}
+
+.info p{
+color:#687083;
+max-width:760px;
+margin:10px auto
+}
+
+@media(max-width:650px){
+
+.hero h1{
+font-size:33px
+}
+
+.presets{
+grid-template-columns:repeat(3,1fr)
+}
+
+.stats{
+grid-template-columns:1fr
+}
+
+.nav-links{
+gap:12px;
+font-size:12px
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="container nav">
+
+<a href="index.html" class="logo">
+Utility<span>Canvas</span>
+</a>
+
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="index.html#tools">Tools</a>
+<a href="index.html#about">About</a>
+</div>
+
+</div>
+</header>
+
+<section class="hero">
+
+<div class="container">
+
+<h1>Resize Image to <span>Exact KB</span></h1>
+
+<p>
+Reduce an image to a target file size such as 20KB, 50KB, 100KB, 200KB or 500KB directly in your browser.
+</p>
+
+</div>
+
+</section>
+
+<main class="container">
+
+<div class="tool-box">
+
+<div class="drop">
+
+<strong>📁 Choose an image</strong>
+
+<small>
+JPG, PNG or WebP • Your image stays in your browser
+</small>
+
+<input
+id="file"
+class="file-input"
+type="file"
+accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+>
+
+</div>
+
+<div class="controls">
+
+<div class="field">
+
+<label>Target file size (KB)</label>
+
+<input
+id="target"
+type="number"
+min="5"
+max="5000"
+value="100"
+placeholder="Example: 100"
+>
+
+<div class="presets">
+
+<div class="preset" data-size="20">20 KB</div>
+<div class="preset" data-size="50">50 KB</div>
+<div class="preset" data-size="100">100 KB</div>
+<div class="preset" data-size="200">200 KB</div>
+<div class="preset" data-size="500">500 KB</div>
+
+</div>
+
+</div>
+
+<div class="field" style="margin-top:18px">
+
+<label>Output format</label>
+
+<select id="format">
+
+<option value="image/jpeg">JPG</option>
+<option value="image/webp">WebP</option>
+<option value="image/png">PNG</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="actions">
+
+<button id="resize" disabled>
+Resize to Target KB
+</button>
+
+<button id="reset" class="secondary">
+Reset
+</button>
+
+</div>
+
+<div class="progress" id="progress">
+
+<div class="progress-bar">
+
+<div class="progress-fill" id="progressFill"></div>
+
+</div>
+
+<div class="progress-text" id="progressText">
+Preparing image...
+</div>
+
+</div>
+
+<div class="result" id="result">
+
+<strong>Image ready</strong>
+
+<div class="stats">
+
+<div class="stat">
+
+<strong id="originalSize">—</strong>
+
+<small>Original</small>
+
+</div>
+
+<div class="stat">
+
+<strong id="newSize">—</strong>
+
+<small>Result</small>
+
+</div>
+
+<div class="stat">
+
+<strong id="dimensions">—</strong>
+
+<small>Dimensions</small>
+
+</div>
+
+</div>
+
+<p class="note" id="note"></p>
+
+<div class="actions">
+
+<button id="download">
+Download Image
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+<section class="info">
+
+<div class="container">
+
+<h2>Resize images to a target file size</h2>
+
+<p>
+UtilityCanvas can reduce images toward a target file size such as 20KB, 50KB, 100KB, 200KB or 500KB.
+</p>
+
+<p>
+The processing happens directly in your browser, so your image does not need to be uploaded to a server.
+</p>
+
+</div>
+
+</section>
+
+<script>
+
+const fileInput = document.getElementById("file");
+const targetInput = document.getElementById("target");
+const formatInput = document.getElementById("format");
+const resizeBtn = document.getElementById("resize");
+const resetBtn = document.getElementById("reset");
+
+const progress = document.getElementById("progress");
+const progressFill = document.getElementById("progressFill");
+const progressText = document.getElementById("progressText");
+
+const result = document.getElementById("result");
+const downloadBtn = document.getElementById("download");
+
+let image = null;
+let originalFile = null;
+let resultBlob = null;
+
+document.querySelectorAll(".preset").forEach(function(button){
+
+button.addEventListener("click",function(){
+
+targetInput.value = button.dataset.size;
+
+});
+
+});
+
+fileInput.addEventListener("change",function(){
+
+const file = this.files && this.files[0];
+
+if(!file) return;
+
+originalFile = file;
+
+const reader = new FileReader();
+
+reader.onload = function(event){
+
+const img = new Image();
+
+img.onload = function(){
+
+image = img;
+
+resizeBtn.disabled = false;
+
+result.style.display = "none";
+
+};
+
+img.onerror = function(){
+
+alert("This image could not be loaded. Please choose a JPG, PNG or WebP image.");
+
+};
+
+img.src = event.target.result;
+
+};
+
+reader.onerror = function(){
+
+alert("Unable to read this image.");
+
+};
+
+reader.readAsDataURL(file);
+
+});
+
+
+resizeBtn.addEventListener("click",async function(){
+
+if(!image) return;
+
+const targetKB = parseFloat(targetInput.value);
+
+if(!targetKB || targetKB < 5){
+
+alert("Please enter a target size of at least 5 KB.");
+
+return;
+
+}
+
+progress.style.display = "block";
+
+result.style.display = "none";
+
+resizeBtn.disabled = true;
+
+progressFill.style.width = "5%";
+
+progressText.textContent = "Analyzing image...";
+
+const targetBytes = targetKB * 1024;
+
+const outputType = formatInput.value;
+
+let bestBlob = null;
+let bestSize = Infinity;
+let bestWidth = image.width;
+let bestHeight = image.height;
+
+let scale = 1;
+
+for(let scaleStep = 0; scaleStep < 10; scaleStep++){
+
+const width = Math.max(1,Math.round(image.width * scale));
+const height = Math.max(1,Math.round(image.height * scale));
+
+progressText.textContent =
+"Trying " + width + " × " + height + " px...";
+
+progressFill.style.width =
+(10 + scaleStep * 8) + "%";
+
+let low = 0.05;
+let high = 1;
+
+for(let i = 0; i < 9; i++){
+
+const quality = (low + high) / 2;
+
+const blob = await createBlob(
+width,
+height,
+outputType,
+quality
+);
+
+if(blob.size <= targetBytes){
+
+if(blob.size > bestSize){
+
+}else{
+
+bestBlob = blob;
+bestSize = blob.size;
+bestWidth = width;
+bestHeight = height;
+
+}
+
+low = quality;
+
+}else{
+
+high = quality;
+
+}
+
+}
+
+if(bestBlob && bestSize >= targetBytes * 0.88){
+
+break;
+
+}
+
+scale *= 0.78;
+
+await new Promise(function(resolve){
+
+setTimeout(resolve,20);
+
+});
+
+}
+
+progressFill.style.width = "100%";
+
+progressText.textContent = "Finished.";
+
+if(!bestBlob){
+
+progress.style.display = "none";
+
+resizeBtn.disabled = false;
+
+alert("The image could not be reduced to the requested size.");
+
+return;
+
+}
+
+resultBlob = bestBlob;
+
+document.getElementById("originalSize").textContent =
+formatBytes(originalFile.size);
+
+document.getElementById("newSize").textContent =
+formatBytes(bestBlob.size);
+
+document.getElementById("dimensions").textContent =
+bestWidth + " × " + bestHeight + " px";
+
+const actualKB = bestBlob.size / 1024;
+
+document.getElementById("note").textContent =
+"Target: " + targetKB.toFixed(0) +
+" KB • Result: " + actualKB.toFixed(2) +
+" KB. The tool keeps the result at or below the requested target.";
+
+result.style.display = "block";
+
+resizeBtn.disabled = false;
+
+setTimeout(function(){
+
+progress.style.display = "none";
+
+},500);
+
+});
+
+
+function createBlob(width,height,type,quality){
+
+return new Promise(function(resolve){
+
+const canvas = document.createElement("canvas");
+
+canvas.width = width;
+canvas.height = height;
+
+const ctx = canvas.getContext("2d");
+
+if(type === "image/jpeg"){
+
+ctx.fillStyle = "#ffffff";
+
+ctx.fillRect(0,0,width,height);
+
+}
+
+ctx.drawImage(image,0,0,width,height);
+
+canvas.toBlob(function(blob){
+
+resolve(blob);
+
+},type,quality);
+
+});
+
+}
+
+
+downloadBtn.addEventListener("click",function(){
+
+if(!resultBlob) return;
+
+const ext =
+formatInput.value === "image/png" ? "png" :
+formatInput.value === "image/webp" ? "webp" : "jpg";
+
+const url = URL.createObjectURL(resultBlob);
+
+const a = document.createElement("a");
+
+a.href = url;
+
+a.download =
+"utilitycanvas-" +
+(targetInput.value || "resized") +
+"kb." + ext;
+
+document.body.appendChild(a);
+
+a.click();
+
+a.remove();
+
+setTimeout(function(){
+
+URL.revokeObjectURL(url);
+
+},1000);
+
+});
+
+
+resetBtn.addEventListener("click",function(){
+
+fileInput.value = "";
+
+image = null;
+
+originalFile = null;
+
+resultBlob = null;
+
+resizeBtn.disabled = true;
+
+result.style.display = "none";
+
+progress.style.display = "none";
+
+progressFill.style.width = "0%";
+
+targetInput.value = "100";
+
+});
+
+
+function formatBytes(bytes){
+
+if(bytes < 1024){
+
+return bytes + " B";
+
+}
+
+if(bytes < 1024 * 1024){
+
+return (bytes / 1024).toFixed(2) + " KB";
+
+}
+
+return (bytes / 1024 / 1024).toFixed(2) + " MB";
+
+}
+
+</script>
+
+</body>
+</html>
