@@ -61,6 +61,15 @@ cursor:pointer;
 background:#fafaff
 }
 .drop:hover{border-color:#635bff}
+  .drop{position:relative}
+.drop input{
+position:absolute;
+inset:0;
+width:100%;
+height:100%;
+opacity:0;
+cursor:pointer
+}
 .drop strong{display:block;font-size:17px;margin-bottom:6px}
 .drop small{color:#7b8495}
 
@@ -173,11 +182,11 @@ background:#fff
 
 <div class="tool-box">
 
-<div class="drop" id="drop">
+<label class="drop" id="drop">
 <strong>📁 Choose an image</strong>
 <small>JPG, PNG or WebP • Your file stays in your browser</small>
-<input id="file" type="file" accept="image/jpeg,image/png,image/webp" hidden>
-</div>
+<input id="file" type="file" accept="image/jpeg,image/png,image/webp">
+</label>
 
 <div class="controls">
 
