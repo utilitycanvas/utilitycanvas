@@ -3,19 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="UtilityCanvas - Free online image, creator and utility tools. Compress, resize, convert and edit images directly in your browser.">
+
+<meta name="description" content="UtilityCanvas offers free online image compression, resizing and creator tools. Compress images privately in your browser.">
+
 <title>UtilityCanvas — Free Online Image & Creator Tools</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
 body{
   font-family:Arial,Helvetica,sans-serif;
   background:#f7f8fc;
   color:#172033;
   line-height:1.6;
 }
-a{text-decoration:none;color:inherit}
-.container{width:min(1120px,92%);margin:auto}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+.container{
+  width:min(1120px,92%);
+  margin:auto;
+}
+
+/* HEADER */
 
 header{
   background:#fff;
@@ -24,29 +51,43 @@ header{
   top:0;
   z-index:20;
 }
+
 .nav{
-  height:70px;
+  min-height:70px;
   display:flex;
   align-items:center;
   justify-content:space-between;
 }
+
 .logo{
   font-size:24px;
   font-weight:800;
   letter-spacing:-.7px;
 }
-.logo span{color:#635bff}
+
+.logo span{
+  color:#635bff;
+}
+
 .nav-links{
   display:flex;
   gap:25px;
   font-size:14px;
   color:#596273;
 }
+
+.nav-links a:hover{
+  color:#635bff;
+}
+
+/* HERO */
+
 .hero{
   padding:78px 0 65px;
   text-align:center;
   background:linear-gradient(180deg,#fff 0%,#f7f8fc 100%);
 }
+
 .badge{
   display:inline-block;
   background:#eeedff;
@@ -57,6 +98,7 @@ header{
   font-weight:700;
   margin-bottom:18px;
 }
+
 .hero h1{
   max-width:820px;
   margin:auto;
@@ -64,33 +106,45 @@ header{
   line-height:1.05;
   letter-spacing:-2.5px;
 }
-.hero h1 span{color:#635bff}
+
+.hero h1 span{
+  color:#635bff;
+}
+
 .hero p{
   max-width:680px;
   margin:22px auto 0;
   color:#687083;
   font-size:18px;
 }
+
+/* TOOLS */
+
 .tools{
   padding:55px 0 80px;
 }
+
 .section-title{
   text-align:center;
   margin-bottom:35px;
 }
+
 .section-title h2{
   font-size:32px;
   letter-spacing:-1px;
 }
+
 .section-title p{
   color:#737b8c;
   margin-top:7px;
 }
+
 .grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:20px;
 }
+
 .card{
   background:#fff;
   border:1px solid #e5e7ee;
@@ -98,10 +152,12 @@ header{
   padding:25px;
   transition:.2s;
 }
+
 .card:hover{
   transform:translateY(-3px);
   box-shadow:0 12px 30px rgba(25,30,50,.08);
 }
+
 .icon{
   width:48px;
   height:48px;
@@ -113,8 +169,18 @@ header{
   font-size:23px;
   margin-bottom:18px;
 }
-.card h3{font-size:19px;margin-bottom:7px}
-.card p{font-size:14px;color:#747c8c;margin-bottom:18px}
+
+.card h3{
+  font-size:19px;
+  margin-bottom:7px;
+}
+
+.card p{
+  font-size:14px;
+  color:#747c8c;
+  margin-bottom:18px;
+}
+
 .btn{
   display:inline-block;
   background:#635bff;
@@ -126,66 +192,237 @@ header{
   border:0;
   cursor:pointer;
 }
-.btn:hover{background:#5148e8}
+
+.btn:hover{
+  background:#5148e8;
+}
+
+.btn:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+/* COMPRESSOR */
 
 .compressor{
   padding:70px 0;
   background:#fff;
 }
+
 .tool-box{
-  max-width:780px;
+  max-width:820px;
   margin:auto;
   border:1px solid #e2e5ed;
   border-radius:20px;
   padding:30px;
   background:#fafbff;
 }
+
 .drop{
+  display:block;
   border:2px dashed #cdd1df;
   border-radius:15px;
   padding:45px 20px;
   text-align:center;
   background:#fff;
   cursor:pointer;
+  transition:.2s;
 }
-.drop:hover{border-color:#635bff}
-.drop strong{display:block;font-size:18px;margin-bottom:7px}
-.drop span{font-size:13px;color:#7b8392}
-input[type=file]{display:none}
-.result{
+
+.drop:hover,
+.drop.dragover{
+  border-color:#635bff;
+  background:#f8f7ff;
+}
+
+.drop strong{
+  display:block;
+  font-size:18px;
+  margin-bottom:7px;
+}
+
+.drop span{
+  font-size:13px;
+  color:#7b8392;
+}
+
+input[type=file]{
   display:none;
-  margin-top:22px;
+}
+
+/* CONTROLS */
+
+.controls{
+  display:none;
+  margin-top:20px;
+  padding:20px;
   background:#fff;
   border:1px solid #e3e6ed;
-  border-radius:14px;
+  border-radius:15px;
+}
+
+.control-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+  margin-bottom:15px;
+}
+
+.control{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.control label{
+  font-size:13px;
+  font-weight:700;
+  color:#4d5668;
+}
+
+.control select,
+.control input[type=number]{
+  width:100%;
+  border:1px solid #d9dce5;
+  border-radius:9px;
+  padding:10px;
+  background:#fff;
+  color:#172033;
+  outline:none;
+}
+
+.control select:focus,
+.control input:focus{
+  border-color:#635bff;
+}
+
+.quality-wrap{
+  margin-top:5px;
+}
+
+.quality-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:13px;
+  font-weight:700;
+  color:#4d5668;
+}
+
+#qualityValue{
+  color:#635bff;
+}
+
+input[type=range]{
+  width:100%;
+  margin-top:10px;
+  accent-color:#635bff;
+}
+
+/* RESULT */
+
+.result{
+  display:none;
+  margin-top:20px;
+  background:#fff;
+  border:1px solid #e3e6ed;
+  border-radius:15px;
   padding:20px;
 }
-.file-name{font-weight:700;margin-bottom:6px}
-.file-info{font-size:14px;color:#687083;margin-bottom:15px}
+
+.file-name{
+  font-weight:700;
+  word-break:break-word;
+  margin-bottom:6px;
+}
+
+.file-info{
+  font-size:14px;
+  color:#687083;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:18px;
+}
+
+.stat{
+  background:#f7f8fc;
+  border-radius:10px;
+  padding:12px;
+  text-align:center;
+}
+
+.stat strong{
+  display:block;
+  font-size:17px;
+}
+
+.stat span{
+  font-size:11px;
+  color:#737b8c;
+}
+
 .progress{
   height:8px;
   background:#e8eaf0;
   border-radius:20px;
   overflow:hidden;
-  margin:15px 0;
+  margin:18px 0;
 }
+
 .progress div{
   width:0;
   height:100%;
   background:#635bff;
-  transition:.4s;
+  transition:.35s;
 }
-.actions{display:flex;gap:10px;flex-wrap:wrap}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.secondary{
+  background:#eef0f6;
+  color:#394255;
+}
+
+.secondary:hover{
+  background:#e3e6ee;
+}
+
+.status{
+  margin-top:12px;
+  font-size:13px;
+  color:#687083;
+}
+
+/* INFO */
 
 .info{
   padding:70px 0;
 }
+
 .info-inner{
   max-width:800px;
   margin:auto;
 }
-.info h2{font-size:30px;margin-bottom:15px}
-.info p{color:#687083;margin-bottom:15px}
+
+.info h2{
+  font-size:30px;
+  margin-bottom:15px;
+}
+
+.info p{
+  color:#687083;
+  margin-bottom:15px;
+}
+
+/* FOOTER */
 
 footer{
   background:#111522;
@@ -193,19 +430,67 @@ footer{
   padding:40px 0;
   text-align:center;
 }
-footer strong{color:#fff;font-size:20px}
-footer p{font-size:13px;margin-top:8px;color:#8e96a7}
+
+footer strong{
+  color:#fff;
+  font-size:20px;
+}
+
+footer p{
+  font-size:13px;
+  margin-top:8px;
+  color:#8e96a7;
+}
+
+/* MOBILE */
 
 @media(max-width:800px){
-  .grid{grid-template-columns:1fr 1fr}
-  .nav-links{display:none}
+
+  .grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .nav-links{
+    display:none;
+  }
+
 }
+
 @media(max-width:560px){
-  .hero{padding:55px 0}
-  .hero h1{font-size:42px}
-  .hero p{font-size:16px}
-  .grid{grid-template-columns:1fr}
-  .tool-box{padding:18px}
+
+  .hero{
+    padding:55px 0;
+  }
+
+  .hero h1{
+    font-size:42px;
+  }
+
+  .hero p{
+    font-size:16px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .tool-box{
+    padding:18px;
+  }
+
+  .control-row{
+    grid-template-columns:1fr;
+  }
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .actions .btn{
+    width:100%;
+    text-align:center;
+  }
+
 }
 </style>
 </head>
@@ -214,246 +499,954 @@ footer p{font-size:13px;margin-top:8px;color:#8e96a7}
 
 <header>
   <div class="container nav">
-    <a class="logo" href="#">Utility<span>Canvas</span></a>
+
+    <a class="logo" href="#">
+      Utility<span>Canvas</span>
+    </a>
+
     <nav class="nav-links">
       <a href="#tools">Tools</a>
       <a href="#compressor">Image Compressor</a>
       <a href="#about">About</a>
     </nav>
+
   </div>
 </header>
 
+
 <section class="hero">
+
   <div class="container">
-    <div class="badge">FREE ONLINE TOOLS</div>
-    <h1>Simple tools for <span>images & creators.</span></h1>
+
+    <div class="badge">
+      FREE ONLINE TOOLS
+    </div>
+
+    <h1>
+      Simple tools for
+      <span>images & creators.</span>
+    </h1>
+
     <p>
       Compress, resize, convert and prepare your images with fast,
       privacy-friendly tools that work directly in your browser.
     </p>
+
   </div>
+
 </section>
 
+
 <section class="tools" id="tools">
+
   <div class="container">
+
     <div class="section-title">
+
       <h2>Popular Tools</h2>
-      <p>More useful tools are coming to UtilityCanvas.</p>
+
+      <p>
+        Practical tools for images, creators and everyday digital tasks.
+      </p>
+
     </div>
+
 
     <div class="grid">
 
       <div class="card">
+
         <div class="icon">🗜️</div>
+
         <h3>Image Compressor</h3>
-        <p>Reduce image file size while keeping good visual quality.</p>
-        <a class="btn" href="#compressor">Use Tool</a>
+
+        <p>
+          Reduce image file size while keeping good visual quality.
+        </p>
+
+        <a class="btn" href="#compressor">
+          Use Tool
+        </a>
+
       </div>
 
+
       <div class="card">
+
         <div class="icon">📐</div>
+
         <h3>Image Resizer</h3>
-        <p>Resize images to the dimensions you need.</p>
-        <button class="btn" onclick="comingSoon()">Coming Soon</button>
+
+        <p>
+          Resize images to the exact dimensions you need.
+        </p>
+
+        <button class="btn" onclick="comingSoon()">
+          Coming Soon
+        </button>
+
       </div>
 
+
       <div class="card">
+
         <div class="icon">📦</div>
+
         <h3>Resize to KB</h3>
-        <p>Prepare an image for a specific file-size limit.</p>
-        <button class="btn" onclick="comingSoon()">Coming Soon</button>
+
+        <p>
+          Prepare an image for a specific file-size limit.
+        </p>
+
+        <button class="btn" onclick="comingSoon()">
+          Coming Soon
+        </button>
+
       </div>
 
+
       <div class="card">
+
         <div class="icon">✂️</div>
+
         <h3>Image Cropper</h3>
-        <p>Crop your image for social media and other uses.</p>
-        <button class="btn" onclick="comingSoon()">Coming Soon</button>
+
+        <p>
+          Crop images for social media and other uses.
+        </p>
+
+        <button class="btn" onclick="comingSoon()">
+          Coming Soon
+        </button>
+
       </div>
 
+
       <div class="card">
+
         <div class="icon">🔄</div>
+
         <h3>Image Converter</h3>
-        <p>Convert images between popular formats.</p>
-        <button class="btn" onclick="comingSoon()">Coming Soon</button>
+
+        <p>
+          Convert images between popular formats.
+        </p>
+
+        <button class="btn" onclick="comingSoon()">
+          Coming Soon
+        </button>
+
       </div>
 
+
       <div class="card">
+
         <div class="icon">🎨</div>
+
         <h3>Creator Tools</h3>
-        <p>Useful image tools for YouTube and social creators.</p>
-        <button class="btn" onclick="comingSoon()">Coming Soon</button>
+
+        <p>
+          Useful image tools for YouTube and social creators.
+        </p>
+
+        <button class="btn" onclick="comingSoon()">
+          Coming Soon
+        </button>
+
       </div>
 
     </div>
+
   </div>
+
 </section>
+
 
 <section class="compressor" id="compressor">
+
   <div class="container">
+
     <div class="section-title">
+
       <h2>Image Compressor</h2>
-      <p>Compress an image directly in your browser.</p>
+
+      <p>
+        Compress an image directly in your browser.
+      </p>
+
     </div>
+
 
     <div class="tool-box">
-      <label class="drop" for="fileInput">
-        <strong>📁 Choose an image</strong>
-        <span>JPG, PNG or WebP • Your file stays in your browser</span>
+
+      <label class="drop" id="dropZone" for="fileInput">
+
+        <strong>
+          📁 Choose an image
+        </strong>
+
+        <span>
+          JPG, PNG or WebP • Your file stays in your browser
+        </span>
+
       </label>
 
-      <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp">
+      <input
+        id="fileInput"
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+      >
+
+
+      <div class="controls" id="controls">
+
+        <div class="control-row">
+
+          <div class="control">
+
+            <label for="format">
+              Output format
+            </label>
+
+            <select id="format">
+
+              <option value="image/jpeg">
+                JPG
+              </option>
+
+              <option value="image/webp">
+                WebP
+              </option>
+
+              <option value="image/png">
+                PNG
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="control">
+
+            <label for="maxWidth">
+              Maximum width
+            </label>
+
+            <input
+              id="maxWidth"
+              type="number"
+              value="2400"
+              min="100"
+              max="10000"
+            >
+
+          </div>
+
+        </div>
+
+
+        <div class="quality-wrap">
+
+          <div class="quality-top">
+
+            <span>
+              Quality
+            </span>
+
+            <span id="qualityValue">
+              80%
+            </span>
+
+          </div>
+
+          <input
+            id="quality"
+            type="range"
+            min="10"
+            max="100"
+            value="80"
+          >
+
+        </div>
+
+      </div>
+
 
       <div class="result" id="result">
-        <div class="file-name" id="fileName"></div>
-        <div class="file-info" id="fileInfo"></div>
+
+        <div
+          class="file-name"
+          id="fileName">
+        </div>
+
+        <div
+          class="file-info"
+          id="fileInfo">
+        </div>
+
+
+        <div class="stats">
+
+          <div class="stat">
+
+            <strong id="originalSize">
+              —
+            </strong>
+
+            <span>
+              Original
+            </span>
+
+          </div>
+
+
+          <div class="stat">
+
+            <strong id="compressedSize">
+              —
+            </strong>
+
+            <span>
+              Compressed
+            </span>
+
+          </div>
+
+
+          <div class="stat">
+
+            <strong id="savedSize">
+              —
+            </strong>
+
+            <span>
+              Saved
+            </span>
+
+          </div>
+
+        </div>
+
 
         <div class="progress">
+
           <div id="progressBar"></div>
+
         </div>
+
 
         <div class="actions">
-          <button class="btn" id="compressBtn">Compress Image</button>
-          <a class="btn" id="downloadBtn" style="display:none" download>
+
+          <button
+            class="btn"
+            id="compressBtn">
+            Compress Image
+          </button>
+
+          <a
+            class="btn"
+            id="downloadBtn"
+            style="display:none"
+            download>
             Download
           </a>
+
+          <button
+            class="btn secondary"
+            id="resetBtn">
+            Reset
+          </button>
+
         </div>
+
+
+        <div
+          class="status"
+          id="status">
+        </div>
+
       </div>
+
     </div>
+
   </div>
+
 </section>
 
+
 <section class="info" id="about">
+
   <div class="container info-inner">
-    <h2>Fast, simple and privacy-friendly</h2>
+
+    <h2>
+      Fast, simple and privacy-friendly
+    </h2>
+
     <p>
       UtilityCanvas is being built as a collection of practical online
       tools for images, creators and everyday digital tasks.
     </p>
+
     <p>
       Our image tools are designed to process files directly in your
       browser whenever possible, so your files don't need to be uploaded
       to a server.
     </p>
+
   </div>
+
 </section>
 
+
 <footer>
+
   <div class="container">
-    <strong>UtilityCanvas</strong>
-    <p>Free online image, creator and utility tools.</p>
-    <p>© 2026 UtilityCanvas. All rights reserved.</p>
+
+    <strong>
+      UtilityCanvas
+    </strong>
+
+    <p>
+      Free online image, creator and utility tools.
+    </p>
+
+    <p>
+      © 2026 UtilityCanvas. All rights reserved.
+    </p>
+
   </div>
+
 </footer>
 
+
 <script>
-const fileInput = document.getElementById("fileInput");
-const result = document.getElementById("result");
-const fileName = document.getElementById("fileName");
-const fileInfo = document.getElementById("fileInfo");
-const compressBtn = document.getElementById("compressBtn");
-const downloadBtn = document.getElementById("downloadBtn");
-const progressBar = document.getElementById("progressBar");
+
+const fileInput =
+  document.getElementById("fileInput");
+
+const dropZone =
+  document.getElementById("dropZone");
+
+const controls =
+  document.getElementById("controls");
+
+const result =
+  document.getElementById("result");
+
+const fileName =
+  document.getElementById("fileName");
+
+const fileInfo =
+  document.getElementById("fileInfo");
+
+const compressBtn =
+  document.getElementById("compressBtn");
+
+const downloadBtn =
+  document.getElementById("downloadBtn");
+
+const resetBtn =
+  document.getElementById("resetBtn");
+
+const progressBar =
+  document.getElementById("progressBar");
+
+const originalSize =
+  document.getElementById("originalSize");
+
+const compressedSize =
+  document.getElementById("compressedSize");
+
+const savedSize =
+  document.getElementById("savedSize");
+
+const status =
+  document.getElementById("status");
+
+const quality =
+  document.getElementById("quality");
+
+const qualityValue =
+  document.getElementById("qualityValue");
+
+const format =
+  document.getElementById("format");
+
+const maxWidth =
+  document.getElementById("maxWidth");
+
 
 let selectedFile = null;
+let downloadUrl = null;
+
+
+/* QUALITY DISPLAY */
+
+quality.addEventListener("input", function(){
+
+  qualityValue.textContent =
+    this.value + "%";
+
+});
+
+
+/* FILE SELECT */
 
 fileInput.addEventListener("change", function(){
-  selectedFile = this.files[0];
 
-  if(!selectedFile) return;
+  if(this.files && this.files[0]){
 
-  fileName.textContent = selectedFile.name;
-  fileInfo.textContent =
-    "Original size: " + formatBytes(selectedFile.size);
+    loadFile(this.files[0]);
 
-  result.style.display = "block";
-  downloadBtn.style.display = "none";
-  progressBar.style.width = "0%";
+  }
+
 });
+
+
+/* DRAG AND DROP */
+
+dropZone.addEventListener("dragover", function(e){
+
+  e.preventDefault();
+
+  dropZone.classList.add("dragover");
+
+});
+
+
+dropZone.addEventListener("dragleave", function(){
+
+  dropZone.classList.remove("dragover");
+
+});
+
+
+dropZone.addEventListener("drop", function(e){
+
+  e.preventDefault();
+
+  dropZone.classList.remove("dragover");
+
+  const file =
+    e.dataTransfer.files[0];
+
+  if(file && file.type.startsWith("image/")){
+
+    loadFile(file);
+
+  }
+
+});
+
+
+/* LOAD FILE */
+
+function loadFile(file){
+
+  selectedFile = file;
+
+  fileName.textContent =
+    file.name;
+
+  fileInfo.textContent =
+    "Ready to compress • " +
+    formatBytes(file.size);
+
+  originalSize.textContent =
+    formatBytes(file.size);
+
+  compressedSize.textContent =
+    "—";
+
+  savedSize.textContent =
+    "—";
+
+  progressBar.style.width =
+    "0%";
+
+  status.textContent =
+    "Choose your settings and compress the image.";
+
+  controls.style.display =
+    "block";
+
+  result.style.display =
+    "block";
+
+  downloadBtn.style.display =
+    "none";
+
+}
+
+
+/* COMPRESS */
 
 compressBtn.addEventListener("click", function(){
 
-  if(!selectedFile) return;
+  if(!selectedFile){
 
-  compressBtn.disabled = true;
-  compressBtn.textContent = "Compressing...";
-  progressBar.style.width = "35%";
+    return;
 
-  const reader = new FileReader();
+  }
+
+  compressBtn.disabled =
+    true;
+
+  compressBtn.textContent =
+    "Compressing...";
+
+  status.textContent =
+    "Processing image in your browser...";
+
+  progressBar.style.width =
+    "20%";
+
+
+  const reader =
+    new FileReader();
+
 
   reader.onload = function(e){
 
-    const img = new Image();
+    progressBar.style.width =
+      "40%";
+
+
+    const img =
+      new Image();
+
 
     img.onload = function(){
 
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
+      let width =
+        img.naturalWidth;
 
-      let width = img.width;
-      let height = img.height;
+      let height =
+        img.naturalHeight;
 
-      const maxDimension = 2400;
 
-      if(width > maxDimension || height > maxDimension){
-        if(width > height){
-          height = Math.round(height * maxDimension / width);
-          width = maxDimension;
-        }else{
-          width = Math.round(width * maxDimension / height);
-          height = maxDimension;
-        }
+      const maximum =
+        Math.max(
+          100,
+          parseInt(maxWidth.value) || 2400
+        );
+
+
+      if(width > maximum){
+
+        height =
+          Math.round(
+            height * maximum / width
+          );
+
+        width =
+          maximum;
+
       }
 
-      canvas.width = width;
-      canvas.height = height;
 
-      ctx.drawImage(img,0,0,width,height);
+      const canvas =
+        document.createElement("canvas");
 
-      progressBar.style.width = "75%";
+      canvas.width =
+        width;
 
-      canvas.toBlob(function(blob){
+      canvas.height =
+        height;
 
-        const url = URL.createObjectURL(blob);
 
-        downloadBtn.href = url;
-        downloadBtn.download =
-          "utilitycanvas-compressed-" +
-          selectedFile.name.replace(/\.[^/.]+$/, "") +
-          ".jpg";
+      const ctx =
+        canvas.getContext("2d");
 
-        downloadBtn.style.display = "inline-block";
 
-        fileInfo.textContent =
-          "Original: " + formatBytes(selectedFile.size) +
-          " • Compressed: " + formatBytes(blob.size);
+      if(format.value === "image/jpeg"){
 
-        progressBar.style.width = "100%";
+        ctx.fillStyle =
+          "#ffffff";
 
-        compressBtn.disabled = false;
-        compressBtn.textContent = "Compress Again";
+        ctx.fillRect(
+          0,
+          0,
+          width,
+          height
+        );
 
-      },"image/jpeg",0.78);
+      }
+
+
+      ctx.drawImage(
+        img,
+        0,
+        0,
+        width,
+        height
+      );
+
+
+      progressBar.style.width =
+        "70%";
+
+
+      const qualityValueNumber =
+        parseInt(quality.value) / 100;
+
+
+      canvas.toBlob(
+
+        function(blob){
+
+          if(!blob){
+
+            showError(
+              "This image could not be compressed."
+            );
+
+            return;
+
+          }
+
+
+          if(downloadUrl){
+
+            URL.revokeObjectURL(
+              downloadUrl
+            );
+
+          }
+
+
+          downloadUrl =
+            URL.createObjectURL(blob);
+
+
+          const extension =
+            getExtension(format.value);
+
+
+          const baseName =
+            selectedFile.name
+              .replace(/\.[^/.]+$/, "");
+
+
+          downloadBtn.href =
+            downloadUrl;
+
+
+          downloadBtn.download =
+            "utilitycanvas-" +
+            baseName +
+            "." +
+            extension;
+
+
+          downloadBtn.style.display =
+            "inline-block";
+
+
+          const original =
+            selectedFile.size;
+
+          const compressed =
+            blob.size;
+
+
+          let saved =
+            ((original - compressed) /
+            original) * 100;
+
+
+          if(saved < 0){
+
+            saved = 0;
+
+          }
+
+
+          originalSize.textContent =
+            formatBytes(original);
+
+          compressedSize.textContent =
+            formatBytes(compressed);
+
+          savedSize.textContent =
+            saved.toFixed(1) + "%";
+
+
+          progressBar.style.width =
+            "100%";
+
+
+          fileInfo.textContent =
+            width +
+            " × " +
+            height +
+            " px • " +
+            extension.toUpperCase();
+
+
+          status.textContent =
+            "Compression complete. Your image was processed locally in your browser.";
+
+
+          compressBtn.disabled =
+            false;
+
+          compressBtn.textContent =
+            "Compress Again";
+
+        },
+
+        format.value,
+
+        qualityValueNumber
+
+      );
+
     };
 
-    img.src = e.target.result;
+
+    img.onerror = function(){
+
+      showError(
+        "Unable to read this image."
+      );
+
+    };
+
+
+    img.src =
+      e.target.result;
+
   };
 
-  reader.readAsDataURL(selectedFile);
+
+  reader.onerror = function(){
+
+    showError(
+      "Unable to read the selected file."
+    );
+
+  };
+
+
+  reader.readAsDataURL(
+    selectedFile
+  );
+
 });
 
-function formatBytes(bytes){
-  if(bytes === 0) return "0 Bytes";
-  const units = ["Bytes","KB","MB","GB"];
-  const i = Math.floor(Math.log(bytes)/Math.log(1024));
-  return parseFloat((bytes / Math.pow(1024,i)).toFixed(2))
-    + " " + units[i];
+
+/* RESET */
+
+resetBtn.addEventListener("click", function(){
+
+  selectedFile = null;
+
+  fileInput.value =
+    "";
+
+  controls.style.display =
+    "none";
+
+  result.style.display =
+    "none";
+
+  progressBar.style.width =
+    "0%";
+
+  downloadBtn.style.display =
+    "none";
+
+  if(downloadUrl){
+
+    URL.revokeObjectURL(
+      downloadUrl
+    );
+
+    downloadUrl = null;
+
+  }
+
+});
+
+
+/* HELPERS */
+
+function getExtension(type){
+
+  if(type === "image/webp"){
+    return "webp";
+  }
+
+  if(type === "image/png"){
+    return "png";
+  }
+
+  return "jpg";
+
 }
 
-function comingSoon(){
-  alert("This tool is coming soon to UtilityCanvas.");
+
+function formatBytes(bytes){
+
+  if(bytes === 0){
+    return "0 Bytes";
+  }
+
+  const units = [
+    "Bytes",
+    "KB",
+    "MB",
+    "GB"
+  ];
+
+  const i =
+    Math.floor(
+      Math.log(bytes) /
+      Math.log(1024)
+    );
+
+  return (
+    parseFloat(
+      (
+        bytes /
+        Math.pow(1024,i)
+      ).toFixed(2)
+    ) +
+    " " +
+    units[i]
+  );
+
 }
+
+
+function showError(message){
+
+  progressBar.style.width =
+    "0%";
+
+  status.textContent =
+    message;
+
+  compressBtn.disabled =
+    false;
+
+  compressBtn.textContent =
+    "Compress Image";
+
+}
+
+
+function comingSoon(){
+
+  alert(
+    "This tool is coming soon to UtilityCanvas."
+  );
+
+}
+
 </script>
 
 </body>
-  </html>
+</html>
