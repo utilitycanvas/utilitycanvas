@@ -5,500 +5,867 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>YouTube Shorts Thumbnail Resizer - UtilityCanvas</title>
-
-<meta name="description" content="Resize images to YouTube Shorts thumbnail dimensions directly in your browser.">
+<meta name="description" content="Resize images to YouTube Shorts thumbnail dimensions directly in your browser. Fast, free and private.">
 
 <style>
 *{box-sizing:border-box}
 
+html,body{margin:0;padding:0}
+
 body{
-  margin:0;
   font-family:Arial,Helvetica,sans-serif;
-  background:#f7f8fc;
-  color:#182033;
+  color:#172033;
+  background:#fff;
+}
+
+.top-area{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(rgba(235,243,250,.48),rgba(231,241,248,.68)),
+    url("https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=2000&q=85")
+    center/cover no-repeat;
 }
 
 header{
-  background:#fff;
-  border-bottom:1px solid #e5e7eb;
-  padding:16px 28px;
+  height:58px;
+  padding:0 18px;
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(210,215,225,.75);
+  position:relative;
+  z-index:5;
 }
 
-.logo{
-  font-size:18px;
-  font-weight:700;
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
-.logo span{
-  color:#6257e8;
+.logo-mark{
+  width:25px;
+  height:31px;
+  background:linear-gradient(145deg,#6556e8,#7c4ee8);
+  clip-path:polygon(0 0,100% 12%,100% 88%,0 100%);
+  position:relative;
+}
+
+.logo-mark:after{
+  content:"";
+  position:absolute;
+  width:7px;
+  height:25px;
+  right:0;
+  top:3px;
+  background:rgba(255,255,255,.32);
+  transform:skewY(-8deg);
+}
+
+.brand-text strong{
+  display:block;
+  font-size:16px;
+  line-height:16px;
+}
+
+.brand-text strong span{color:#6654e8}
+
+.brand-text small{
+  display:block;
+  color:#7c8493;
+  font-size:8px;
+  margin-top:3px;
+}
+
+nav{
+  display:flex;
+  align-items:center;
+  gap:24px;
 }
 
 nav a{
-  color:#667085;
+  color:#344054;
   text-decoration:none;
-  margin-left:22px;
-  font-size:13px;
+  font-size:11px;
+  font-weight:600;
 }
 
-.container{
-  max-width:900px;
+.all-tools{
+  background:#6154e8;
+  color:#fff!important;
+  padding:11px 17px;
+  border-radius:6px;
+  box-shadow:0 5px 14px rgba(97,84,232,.25);
+}
+
+.hero-wrap{
+  max-width:1120px;
   margin:auto;
-  padding:42px 18px 70px;
+  padding:26px 20px 40px;
+  position:relative;
 }
 
 .hero{
   text-align:center;
-  margin-bottom:32px;
+  position:relative;
+  z-index:2;
+}
+
+.badge{
+  display:inline-block;
+  background:rgba(255,255,255,.76);
+  border:1px solid rgba(255,255,255,.9);
+  padding:6px 13px;
+  border-radius:20px;
+  font-size:10px;
+  font-weight:700;
+  color:#596275;
+  box-shadow:0 5px 15px rgba(50,70,90,.08);
 }
 
 .hero h1{
-  font-size:32px;
-  margin:0 0 12px;
+  margin:10px 0 7px;
+  font-size:34px;
+  line-height:1.1;
+  letter-spacing:-1.2px;
+  color:#17213a;
 }
 
-.hero h1 span{
-  color:#6257e8;
-}
+.hero h1 span{color:#6255e7}
 
 .hero p{
-  color:#667085;
+  margin:0;
+  color:#596579;
+  font-size:12px;
+}
+
+.layout{
+  max-width:1000px;
+  margin:34px auto 0;
+  display:grid;
+  grid-template-columns:175px minmax(0,560px) 175px;
+  align-items:center;
+  gap:24px;
+}
+
+.side{
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+}
+
+.feature{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+}
+
+.feature-icon{
+  width:30px;
+  height:30px;
+  flex:none;
+  border-radius:50%;
+  background:rgba(255,255,255,.82);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#6255e7;
   font-size:14px;
+  box-shadow:0 5px 15px rgba(30,45,60,.08);
+}
+
+.feature strong{
+  display:block;
+  font-size:11px;
+  margin-bottom:3px;
+}
+
+.feature p{
+  margin:0;
+  color:#667085;
+  font-size:9px;
+  line-height:1.35;
+}
+
+.note{
+  color:#716c8c;
+  font-family:"Comic Sans MS",cursive;
+  font-size:12px;
+  line-height:1.5;
+  transform:rotate(-3deg);
+  padding:10px;
+}
+
+.note:before{
+  content:"↗";
+  font-size:25px;
+  display:block;
+  margin-bottom:4px;
 }
 
 .card{
-  background:#fff;
-  border:1px solid #e4e7ec;
-  border-radius:18px;
-  padding:22px;
-  box-shadow:0 8px 30px rgba(20,30,50,.05);
+  background:rgba(255,255,255,.96);
+  border:1px solid rgba(220,224,235,.9);
+  border-radius:20px;
+  padding:18px;
+  box-shadow:0 16px 40px rgba(30,40,60,.15);
 }
 
 .upload{
-  border:2px dashed #d8dbea;
+  border:2px dashed #b8b1e9;
   border-radius:14px;
-  padding:34px 16px;
+  padding:25px 14px;
   text-align:center;
-  background:#fcfcff;
+  background:#fbfaff;
+  transition:.2s;
+}
+
+.upload:hover{background:#f7f5ff}
+
+.upload-icon{
+  width:38px;
+  height:38px;
+  margin:0 auto 9px;
+  border-radius:50%;
+  background:#eeeaff;
+  color:#6255e7;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:17px;
 }
 
 .upload label{
+  display:block;
+  font-size:12px;
   font-weight:700;
   cursor:pointer;
 }
 
-.upload input{
-  margin-top:18px;
-  max-width:100%;
+.upload input{display:none}
+
+.upload p{
+  margin:7px 0 0;
+  color:#7a8290;
+  font-size:9px;
 }
 
 .preview{
-  margin-top:14px;
-  background:#f1f3f8;
-  border-radius:12px;
-  padding:16px;
+  display:none;
+  margin-top:12px;
+  padding:12px;
+  background:#f3f4f8;
+  border-radius:11px;
   text-align:center;
 }
 
+.preview.show{display:block}
+
 canvas{
   max-width:100%;
+  max-height:230px;
+  width:auto;
   height:auto;
   display:block;
   margin:auto;
   border-radius:8px;
+  background:#fff;
 }
 
 .preview-note{
-  margin-top:10px;
-  font-size:12px;
-  color:#667085;
+  margin-top:8px;
+  color:#737b8a;
+  font-size:9px;
 }
 
-.presets-title{
-  font-size:13px;
+.section-label{
+  font-size:10px;
   font-weight:700;
-  margin-top:18px;
+  margin-top:15px;
+  color:#343b4b;
 }
 
 .presets{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-top:9px;
+  gap:8px;
+  margin-top:7px;
 }
 
 button{
   border:0;
-  border-radius:9px;
-  padding:12px 14px;
+  font-family:inherit;
   cursor:pointer;
   font-weight:700;
 }
 
 .preset{
+  padding:10px 8px;
+  border-radius:8px;
   background:#eef0f7;
-  color:#344054;
+  color:#3e4657;
+  font-size:10px;
 }
 
 .preset.active{
-  background:#dcdcff;
-  color:#4f46d8;
+  background:#dfddff;
+  color:#5044d5;
 }
 
 .grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:16px;
+  gap:10px;
+  margin-top:12px;
 }
 
 .field label{
   display:block;
-  font-size:12px;
+  margin-bottom:5px;
+  font-size:10px;
   font-weight:700;
-  margin-bottom:6px;
+  color:#424a5b;
 }
 
 input,select{
   width:100%;
-  padding:11px 12px;
+  height:35px;
   border:1px solid #d8dce7;
-  border-radius:9px;
+  border-radius:8px;
+  padding:0 10px;
   background:#fff;
-  font-size:14px;
+  color:#263043;
+  font-size:11px;
+  outline:none;
+}
+
+input:focus,select:focus{
+  border-color:#8b82ed;
+  box-shadow:0 0 0 2px rgba(98,85,231,.08);
 }
 
 .actions{
   display:flex;
-  gap:10px;
-  margin-top:18px;
+  gap:8px;
+  margin-top:15px;
 }
 
-.primary{
-  background:#6257e8;
-  color:white;
+.primary,.secondary,.download{
+  padding:10px 14px;
+  border-radius:8px;
+  font-size:10px;
+}
+
+.primary,.download{
+  background:#6858e9;
+  color:#fff;
+  box-shadow:0 5px 12px rgba(104,88,233,.18);
 }
 
 .secondary{
-  background:#eef0f7;
-  color:#344054;
+  background:#edf0f6;
+  color:#3d4655;
 }
 
 .result{
-  margin-top:20px;
+  margin-top:14px;
+  padding:12px;
+  border-radius:11px;
   background:#f6f7fb;
-  border-radius:12px;
-  padding:16px;
+  display:none;
 }
 
 .result h3{
-  margin:0 0 12px;
-  font-size:14px;
+  margin:0 0 9px;
+  font-size:11px;
 }
 
 .stats{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:8px;
+  gap:7px;
 }
 
 .stat{
-  background:white;
-  border-radius:9px;
-  padding:14px 8px;
+  background:#fff;
+  border-radius:8px;
+  padding:9px 5px;
   text-align:center;
 }
 
 .stat strong{
   display:block;
-  font-size:15px;
+  font-size:10px;
 }
 
 .stat small{
-  color:#667085;
-  font-size:11px;
+  color:#78808e;
+  font-size:8px;
 }
 
 .download{
-  margin-top:14px;
-  background:#6257e8;
-  color:white;
+  width:100%;
+  margin-top:10px;
+}
+
+.bottom-features{
+  max-width:1000px;
+  margin:28px auto 0;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+  position:relative;
+  z-index:2;
+}
+
+.bottom-feature{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.bottom-icon{
+  width:34px;
+  height:34px;
+  flex:none;
+  border-radius:50%;
+  background:rgba(255,255,255,.82);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#6255e7;
+  font-size:15px;
+  box-shadow:0 5px 14px rgba(30,45,60,.07);
+}
+
+.bottom-feature strong{
+  display:block;
+  font-size:10px;
+}
+
+.bottom-feature span{
+  display:block;
+  color:#727b8a;
+  font-size:8px;
+  margin-top:3px;
 }
 
 .info{
-  margin-top:38px;
   background:#fff;
-  padding:30px;
-  border-top:1px solid #e5e7eb;
+  padding:48px 20px 42px;
+  border-top:1px solid #edf0f3;
+}
+
+.info-inner{
+  max-width:1000px;
+  margin:auto;
 }
 
 .info h2{
+  margin:0 0 14px;
   font-size:20px;
+  color:#20283a;
 }
 
-.info p{
-  color:#667085;
+.info h3{
+  margin:22px 0 8px;
   font-size:14px;
+}
+
+.info p,.info li{
+  color:#697282;
+  font-size:12px;
   line-height:1.7;
 }
 
+.info ul{padding-left:18px}
+
+footer{
+  background:#151a27;
+  color:#aeb5c3;
+  text-align:center;
+  padding:25px 15px;
+  font-size:10px;
+}
+
+footer strong{color:#fff}
+
+@media(max-width:900px){
+  .layout{
+    grid-template-columns:minmax(0,560px);
+    justify-content:center;
+  }
+
+  .side{display:none}
+
+  .bottom-features{
+    grid-template-columns:1fr 1fr;
+    max-width:560px;
+  }
+}
+
 @media(max-width:600px){
-
-  .hero h1{
-    font-size:27px;
-  }
-
-  .grid{
-    grid-template-columns:1fr;
-  }
-
-  .presets{
-    grid-template-columns:1fr;
-  }
-
-  .stats{
-    grid-template-columns:1fr;
-  }
-
   header{
-    padding:14px 16px;
+    height:58px;
+    padding:0 15px;
   }
 
-  nav a{
-    margin-left:10px;
+  .brand-text small{font-size:7px}
+
+  nav{gap:12px}
+
+  nav a{font-size:9px}
+
+  nav a:nth-child(3){display:none}
+
+  .all-tools{padding:9px 11px}
+
+  .hero-wrap{
+    padding:25px 12px 30px;
   }
+
+  .hero h1{font-size:27px}
+
+  .hero p{font-size:10px}
+
+  .layout{
+    margin-top:25px;
+    width:100%;
+  }
+
+  .card{
+    padding:15px;
+    border-radius:17px;
+  }
+
+  .upload{padding:22px 10px}
+
+  .grid{grid-template-columns:1fr}
+
+  .bottom-features{
+    grid-template-columns:1fr 1fr;
+    gap:18px 10px;
+    margin-top:24px;
+  }
+
+  .bottom-feature strong{font-size:9px}
+
+  .bottom-feature span{font-size:7px}
+
+  .bottom-icon{
+    width:30px;
+    height:30px;
+  }
+
+  .info{padding:38px 15px}
+
+  .info h2{font-size:18px}
 }
 </style>
 </head>
 
 <body>
 
+<div class="top-area">
+
 <header>
 
-<div class="logo">
-Utility<span>Canvas</span>
-</div>
+  <div class="brand">
 
-<nav>
-<a href="index.html">Home</a>
-<a href="index.html">Tools</a>
-<a href="index.html">About</a>
-</nav>
+    <div class="logo-mark"></div>
+
+    <div class="brand-text">
+      <strong>Utility<span>Canvas</span></strong>
+      <small>Simple Tools for a Smarter You</small>
+    </div>
+
+  </div>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="index.html">Tools</a>
+    <a href="index.html">About</a>
+    <a class="all-tools" href="index.html">▦ &nbsp;All Tools</a>
+  </nav>
 
 </header>
 
-<div class="container">
+<div class="hero-wrap">
 
 <section class="hero">
 
-<h1>YouTube <span>Shorts Thumbnail Resizer</span></h1>
+  <div class="badge">
+    Fast • Free • 100% Private
+  </div>
 
-<p>
-Create a vertical YouTube Shorts thumbnail directly in your browser.
-</p>
+  <h1>
+    YouTube <span>Shorts Thumbnail Resizer</span>
+  </h1>
+
+  <p>
+    Create a vertical YouTube Shorts thumbnail directly in your browser.
+  </p>
 
 </section>
 
-<div class="card">
+<div class="layout">
 
-<div class="upload">
+  <div class="side">
 
-<label for="file">📁 Choose an image</label>
+    <div class="feature">
 
-<div>
-<input id="file" type="file" accept="image/jpeg,image/png,image/webp">
+      <div class="feature-icon">⚡</div>
+
+      <div>
+        <strong>Fast</strong>
+        <p>Resize your thumbnail instantly.</p>
+      </div>
+
+    </div>
+
+    <div class="feature">
+
+      <div class="feature-icon">🔒</div>
+
+      <div>
+        <strong>Private</strong>
+        <p>Your image stays on your device.</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <div class="upload">
+
+      <div class="upload-icon">☁</div>
+
+      <label for="file">
+        Choose your image
+      </label>
+
+      <input
+        id="file"
+        type="file"
+        accept="image/jpeg,image/png,image/webp">
+
+      <p>
+        JPG, PNG or WebP • Processing happens in your browser
+      </p>
+
+    </div>
+
+    <div class="preview" id="preview">
+
+      <canvas id="canvas"></canvas>
+
+      <div class="preview-note">
+        The image fills the 9:16 frame without stretching.
+        Excess edges are cropped.
+      </div>
+
+    </div>
+
+    <div class="section-label">
+      YouTube Shorts thumbnail size
+    </div>
+
+    <div class="presets">
+
+      <button
+        class="preset active"
+        data-w="2160"
+        data-h="3840">
+        2160 × 3840
+      </button>
+
+      <button
+        class="preset"
+        data-w="1080"
+        data-h="1920">
+        1080 × 1920
+      </button>
+
+      <button
+        class="preset"
+        data-w="720"
+        data-h="1280">
+        720 × 1280
+      </button>
+
+    </div>
+
+    <div class="grid">
+
+      <div class="field">
+
+        <label>Width (px)</label>
+
+        <input
+          id="width"
+          type="number"
+          value="2160"
+          min="100"
+          max="8000">
+
+      </div>
+
+      <div class="field">
+
+        <label>Height (px)</label>
+
+        <input
+          id="height"
+          type="number"
+          value="3840"
+          min="100"
+          max="8000">
+
+      </div>
+
+    </div>
+
+    <div class="field" style="margin-top:11px">
+
+      <label>Output format</label>
+
+      <select id="format">
+
+        <option value="image/jpeg">JPG</option>
+        <option value="image/png">PNG</option>
+        <option value="image/webp">WebP</option>
+
+      </select>
+
+    </div>
+
+    <div class="field" style="margin-top:11px">
+
+      <label>Quality</label>
+
+      <input
+        id="quality"
+        type="number"
+        value="90"
+        min="10"
+        max="100">
+
+    </div>
+
+    <div class="actions">
+
+      <button
+        class="primary"
+        id="resize">
+        Resize Shorts Thumbnail
+      </button>
+
+      <button
+        class="secondary"
+        id="reset">
+        Reset
+      </button>
+
+    </div>
+
+    <div
+      class="result"
+      id="result">
+
+      <h3>
+        YouTube Shorts thumbnail ready
+      </h3>
+
+      <div class="stats">
+
+        <div class="stat">
+          <strong id="originalSize">-</strong>
+          <small>Original</small>
+        </div>
+
+        <div class="stat">
+          <strong id="outputSize">-</strong>
+          <small>Output</small>
+        </div>
+
+        <div class="stat">
+          <strong id="dimensions">-</strong>
+          <small>Dimensions</small>
+        </div>
+
+      </div>
+
+      <button
+        class="download"
+        id="download">
+        Download Shorts Thumbnail
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="side">
+
+    <div class="note">
+      Create a clean vertical thumbnail for your Shorts content.
+    </div>
+
+  </div>
+
 </div>
 
-<p style="font-size:12px;color:#667085">
-JPG, PNG or WebP · Your image stays in your browser
-</p>
+<div class="bottom-features">
 
-</div>
+  <div class="bottom-feature">
 
-<div class="preview">
+    <div class="bottom-icon">🔒</div>
 
-<canvas id="canvas"></canvas>
+    <div>
+      <strong>100% Private</strong>
+      <span>All processing happens in your browser</span>
+    </div>
 
-<div class="preview-note">
-The image fills the 9:16 frame without stretching.
-Excess edges are cropped.
-</div>
+  </div>
 
-</div>
+  <div class="bottom-feature">
 
-<div class="presets-title">
-YouTube Shorts thumbnail size
-</div>
+    <div class="bottom-icon">⚡</div>
 
-<div class="presets">
+    <div>
+      <strong>Super Fast</strong>
+      <span>Get results instantly</span>
+    </div>
 
-<button class="preset active"
-data-w="2160"
-data-h="3840">
-2160 × 3840
-</button>
+  </div>
 
-<button class="preset"
-data-w="1080"
-data-h="1920">
-1080 × 1920
-</button>
+  <div class="bottom-feature">
 
-<button class="preset"
-data-w="720"
-data-h="1280">
-720 × 1280
-</button>
+    <div class="bottom-icon">★</div>
 
-</div>
+    <div>
+      <strong>High Quality</strong>
+      <span>Preserve image quality</span>
+    </div>
 
-<div class="grid">
+  </div>
 
-<div class="field">
+  <div class="bottom-feature">
 
-<label>
-Width (px)
-</label>
+    <div class="bottom-icon">◫</div>
 
-<input
-id="width"
-type="number"
-value="2160"
-min="100"
-max="8000">
+    <div>
+      <strong>Works on All Devices</strong>
+      <span>Mobile, tablet and desktop</span>
+    </div>
 
-</div>
-
-<div class="field">
-
-<label>
-Height (px)
-</label>
-
-<input
-id="height"
-type="number"
-value="3840"
-min="100"
-max="8000">
-
-</div>
-
-</div>
-
-<div class="field" style="margin-top:14px">
-
-<label>
-Output format
-</label>
-
-<select id="format">
-
-<option value="image/jpeg">
-JPG
-</option>
-
-<option value="image/png">
-PNG
-</option>
-
-<option value="image/webp">
-WebP
-</option>
-
-</select>
-
-</div>
-
-<div class="field" style="margin-top:14px">
-
-<label>
-Quality
-</label>
-
-<input
-id="quality"
-type="number"
-value="90"
-min="10"
-max="100">
-
-</div>
-
-<div class="actions">
-
-<button
-class="primary"
-id="resize">
-Resize Shorts Thumbnail
-</button>
-
-<button
-class="secondary"
-id="reset">
-Reset
-</button>
-
-</div>
-
-<div
-class="result"
-id="result"
-style="display:none">
-
-<h3>
-YouTube Shorts thumbnail ready
-</h3>
-
-<div class="stats">
-
-<div class="stat">
-
-<strong id="originalSize">
--
-</strong>
-
-<small>
-Original
-</small>
-
-</div>
-
-<div class="stat">
-
-<strong id="outputSize">
--
-</strong>
-
-<small>
-Output
-</small>
-
-</div>
-
-<div class="stat">
-
-<strong id="dimensions">
--
-</strong>
-
-<small>
-Dimensions
-</small>
-
-</div>
-
-</div>
-
-<button
-class="download"
-id="download">
-
-Download Shorts Thumbnail
-
-</button>
+  </div>
 
 </div>
 
@@ -507,32 +874,59 @@ Download Shorts Thumbnail
 
 <section class="info">
 
-<div style="max-width:850px;margin:auto">
+  <div class="info-inner">
 
-<h2>
-Create YouTube Shorts-ready thumbnails
-</h2>
+    <h2>
+      Free YouTube Shorts Thumbnail Resizer
+    </h2>
 
-<p>
-Resize images to vertical 9:16 dimensions suitable for YouTube Shorts.
-The recommended Shorts thumbnail resolution is 2160 × 3840 pixels.
-</p>
+    <p>
+      UtilityCanvas YouTube Shorts Thumbnail Resizer lets you resize
+      images to vertical 9:16 dimensions directly in your browser
+      without uploading your files to a server.
+    </p>
 
-<p>
-You can also create smaller 1080 × 1920 or 720 × 1280 versions.
-The image is cropped from the center to prevent stretching or distortion.
-</p>
+    <h3>
+      How to resize a YouTube Shorts thumbnail
+    </h3>
 
-<p>
-Your image is processed directly in your browser and is not uploaded to a server.
-</p>
+    <ul>
+      <li>Choose a JPG, PNG or WebP image.</li>
+      <li>Select 2160 × 3840, 1080 × 1920 or 720 × 1280.</li>
+      <li>Adjust the width and height if needed.</li>
+      <li>Select your preferred output format.</li>
+      <li>Choose image quality.</li>
+      <li>Click Resize Shorts Thumbnail.</li>
+      <li>Download the finished thumbnail.</li>
+    </ul>
 
-</div>
+    <h3>
+      Automatic 9:16 cropping
+    </h3>
+
+    <p>
+      The image is cropped from the center to fill the selected
+      vertical frame without stretching or distorting the image.
+    </p>
+
+    <h3>
+      Private browser-based processing
+    </h3>
+
+    <p>
+      Your image is processed directly inside your browser.
+      Your image does not need to be uploaded to a server.
+    </p>
+
+  </div>
 
 </section>
 
-<script>
+<footer>
+  <strong>UtilityCanvas</strong> — Simple Tools for a Smarter You
+</footer>
 
+<script>
 const fileInput =
 document.getElementById("file");
 
@@ -563,6 +957,9 @@ document.getElementById("reset");
 const result =
 document.getElementById("result");
 
+const preview =
+document.getElementById("preview");
+
 const originalSize =
 document.getElementById("originalSize");
 
@@ -579,328 +976,322 @@ let image = null;
 let originalFile = null;
 let outputBlob = null;
 
-
 function formatBytes(bytes){
 
-if(bytes < 1024)
-return bytes + " B";
+  if(bytes < 1024)
+    return bytes + " B";
 
-if(bytes < 1024 * 1024)
-return (bytes / 1024).toFixed(2) + " KB";
+  if(bytes < 1024 * 1024)
+    return (bytes / 1024).toFixed(2) + " KB";
 
-return (bytes / (1024 * 1024)).toFixed(2) + " MB";
-
+  return (bytes / (1024 * 1024)).toFixed(2) + " MB";
 }
-
 
 fileInput.addEventListener("change",()=>{
 
-const file =
-fileInput.files[0];
+  const file =
+  fileInput.files[0];
 
-if(!file) return;
+  if(!file) return;
 
-originalFile = file;
+  originalFile = file;
 
-const reader =
-new FileReader();
+  const reader =
+  new FileReader();
 
-reader.onload = e =>{
+  reader.onload = e =>{
 
-const img =
-new Image();
+    const img =
+    new Image();
 
-img.onload = ()=>{
+    img.onload = ()=>{
 
-image = img;
+      image = img;
 
-canvas.width =
-img.width;
+      canvas.width =
+      img.width;
 
-canvas.height =
-img.height;
+      canvas.height =
+      img.height;
 
-ctx.drawImage(
-img,
-0,
-0
-);
+      ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
 
-result.style.display =
-"none";
+      ctx.drawImage(
+        img,
+        0,
+        0
+      );
 
-};
+      preview.classList.add("show");
 
-img.src =
-e.target.result;
+      result.style.display =
+      "none";
 
-};
+      outputBlob = null;
 
-reader.readAsDataURL(file);
+    };
+
+    img.src =
+    e.target.result;
+
+  };
+
+  reader.readAsDataURL(file);
 
 });
-
 
 document.querySelectorAll(".preset")
 .forEach(button=>{
 
-button.addEventListener("click",()=>{
+  button.addEventListener("click",()=>{
 
-document.querySelectorAll(".preset")
-.forEach(b =>
-b.classList.remove("active")
-);
+    document.querySelectorAll(".preset")
+    .forEach(b =>
+      b.classList.remove("active")
+    );
 
-button.classList.add("active");
+    button.classList.add("active");
 
-widthInput.value =
-button.dataset.w;
+    widthInput.value =
+    button.dataset.w;
 
-heightInput.value =
-button.dataset.h;
+    heightInput.value =
+    button.dataset.h;
+
+  });
 
 });
-
-});
-
 
 resizeBtn.addEventListener("click",()=>{
 
-if(!image){
+  if(!image){
 
-alert(
-"Please choose an image first."
-);
+    alert(
+      "Please choose an image first."
+    );
 
-return;
+    return;
+  }
 
-}
+  const targetW =
+  parseInt(widthInput.value);
 
-const targetW =
-parseInt(widthInput.value);
+  const targetH =
+  parseInt(heightInput.value);
 
-const targetH =
-parseInt(heightInput.value);
+  if(
+    !targetW ||
+    !targetH ||
+    targetW < 100 ||
+    targetH < 100
+  ){
 
-if(!targetW || !targetH){
+    alert(
+      "Please enter valid dimensions."
+    );
 
-alert(
-"Please enter valid dimensions."
-);
+    return;
+  }
 
-return;
+  canvas.width =
+  targetW;
 
-}
+  canvas.height =
+  targetH;
 
-canvas.width =
-targetW;
+  ctx.clearRect(
+    0,
+    0,
+    targetW,
+    targetH
+  );
 
-canvas.height =
-targetH;
+  const sourceRatio =
+  image.width /
+  image.height;
 
-ctx.clearRect(
-0,
-0,
-targetW,
-targetH
-);
+  const targetRatio =
+  targetW /
+  targetH;
 
+  let sourceW;
+  let sourceH;
+  let sourceX;
+  let sourceY;
 
-/*
-Cover crop.
+  if(sourceRatio > targetRatio){
 
-The image fills the entire
-9:16 canvas without distortion.
-Excess edges are cropped.
-*/
+    sourceH =
+    image.height;
 
-const sourceRatio =
-image.width / image.height;
+    sourceW =
+    sourceH * targetRatio;
 
-const targetRatio =
-targetW / targetH;
+    sourceX =
+    (image.width - sourceW) / 2;
 
-let sourceW;
-let sourceH;
-let sourceX;
-let sourceY;
+    sourceY = 0;
 
-if(sourceRatio > targetRatio){
+  }else{
 
-sourceH =
-image.height;
+    sourceW =
+    image.width;
 
-sourceW =
-sourceH * targetRatio;
+    sourceH =
+    sourceW / targetRatio;
 
-sourceX =
-(image.width - sourceW) / 2;
+    sourceX = 0;
 
-sourceY = 0;
+    sourceY =
+    (image.height - sourceH) / 2;
 
-}else{
+  }
 
-sourceW =
-image.width;
+  ctx.drawImage(
+    image,
+    sourceX,
+    sourceY,
+    sourceW,
+    sourceH,
+    0,
+    0,
+    targetW,
+    targetH
+  );
 
-sourceH =
-sourceW / targetRatio;
+  const quality =
+  Math.max(
+    0.1,
+    Math.min(
+      1,
+      parseInt(qualityInput.value) / 100
+    )
+  );
 
-sourceX = 0;
+  canvas.toBlob(blob=>{
 
-sourceY =
-(image.height - sourceH) / 2;
+    if(!blob) return;
 
-}
+    outputBlob =
+    blob;
 
+    originalSize.textContent =
+    formatBytes(
+      originalFile.size
+    );
 
-ctx.drawImage(
-image,
-sourceX,
-sourceY,
-sourceW,
-sourceH,
-0,
-0,
-targetW,
-targetH
-);
+    outputSize.textContent =
+    formatBytes(
+      blob.size
+    );
 
+    dimensions.textContent =
+    targetW +
+    " × " +
+    targetH +
+    " px";
 
-const quality =
-Math.max(
-0.1,
-Math.min(
-1,
-parseInt(qualityInput.value) / 100
-)
-);
+    result.style.display =
+    "block";
 
-
-canvas.toBlob(blob=>{
-
-if(!blob) return;
-
-outputBlob =
-blob;
-
-originalSize.textContent =
-formatBytes(
-originalFile.size
-);
-
-outputSize.textContent =
-formatBytes(
-blob.size
-);
-
-dimensions.textContent =
-targetW +
-" × " +
-targetH +
-" px";
-
-result.style.display =
-"block";
-
-},
-formatInput.value,
-quality);
+  },
+  formatInput.value,
+  quality);
 
 });
-
 
 downloadBtn.addEventListener("click",()=>{
 
-if(!outputBlob)
-return;
+  if(!outputBlob)
+    return;
 
-let extension =
-"jpg";
+  let extension =
+  "jpg";
 
-if(formatInput.value === "image/png")
-extension = "png";
+  if(formatInput.value === "image/png")
+    extension = "png";
 
-if(formatInput.value === "image/webp")
-extension = "webp";
+  if(formatInput.value === "image/webp")
+    extension = "webp";
 
-const url =
-URL.createObjectURL(
-outputBlob
-);
+  const url =
+  URL.createObjectURL(
+    outputBlob
+  );
 
-const a =
-document.createElement("a");
+  const a =
+  document.createElement("a");
 
-a.href =
-url;
+  a.href =
+  url;
 
-a.download =
-"utilitycanvas-youtube-shorts-thumbnail." +
-extension;
+  a.download =
+  "utilitycanvas-youtube-shorts-thumbnail." +
+  extension;
 
-document.body.appendChild(a);
+  document.body.appendChild(a);
 
-a.click();
+  a.click();
 
-a.remove();
+  a.remove();
 
-setTimeout(
-()=>{
-URL.revokeObjectURL(url);
-},
-1000
-);
+  setTimeout(()=>{
+    URL.revokeObjectURL(url);
+  },1000);
 
 });
-
 
 resetBtn.addEventListener("click",()=>{
 
-fileInput.value = "";
+  fileInput.value = "";
 
-image = null;
+  image = null;
+  originalFile = null;
+  outputBlob = null;
 
-originalFile = null;
+  ctx.clearRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
 
-outputBlob = null;
+  preview.classList.remove("show");
 
-ctx.clearRect(
-0,
-0,
-canvas.width,
-canvas.height
-);
+  result.style.display =
+  "none";
 
-result.style.display =
-"none";
+  widthInput.value =
+  2160;
 
-widthInput.value =
-2160;
+  heightInput.value =
+  3840;
 
-heightInput.value =
-3840;
+  formatInput.value =
+  "image/jpeg";
 
-formatInput.value =
-"image/jpeg";
+  qualityInput.value =
+  90;
 
-qualityInput.value =
-90;
+  document.querySelectorAll(".preset")
+  .forEach(b =>
+    b.classList.remove("active")
+  );
 
-document.querySelectorAll(".preset")
-.forEach(b =>
-b.classList.remove("active")
-);
-
-document
-.querySelector(
-".preset[data-w='2160']"
-)
-.classList.add("active");
+  document
+  .querySelector(
+    ".preset[data-w='2160']"
+  )
+  .classList.add("active");
 
 });
-
 </script>
 
 </body>
 </html>
+```0
