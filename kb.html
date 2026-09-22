@@ -873,31 +873,205 @@ resizeBtn.addEventListener("click", async function() {
         return;
     }
 
-    resultBlob = bestBlob;
+<script>
+const fileInput = document.getElementById("file");
+const targetInput = document.getElementById("target");
+const formatInput = document.getElementById("format");
+const resizeBtn = document.getElementById("resize");
+const resetBtn = document.getElementById("reset");
+
+const progress = document.getElementById("progress");
+const progressFill = document.getElementById("progressFill");
+const progressText = document.getElementById("progressText");
+
+const result = document.getElementById("result");
+const downloadBtn = document.getElementById("download");
+
+let image = null;
+let originalFile = null;
+let resultBlob = null;
+
+document.querySelectorAll(".preset").forEach(function(button) {
+    button.addEventListener("click", function() {
+        targetInput.value = button.dataset.size;
+    });
+});
+
+fileInput.addEventListener("change", function() {
+    const file = this.files && this.files[0];
+
+    if (!file) return;
+
+    originalFile = file;
+
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+        const img = new Image();
+
+        img.onload = function() {
+            image = img;
+            resizeBtn.disabled = false;
+            result.style.display = "none";
+        };
+
+        img.onerror = function() {
+            alert("This image could not be loaded.");
+        };
+
+        img.src = event.target.result;
+    };
+
+    reader.readAsDataURL(file);
+});
+
+resizeBtn.addEventListener("click", async function() {
+
+    if (!image) return;
+
+    const targetKB = Number(targetInput.value);
+    const targetBytes = targetKB * 1024;
+    const type = formatInput.value;
+
+    if (!targetKB || targetKB < 5) {
+        alert("Please enter a target size of at least 5 KB.");
+        return;
+    }
+
+    resizeBtn.disabled = true;
+    progress.style.display = "block";
+    result.style.display = "none";
+
+    let scale = 1;
+    let finalBlob = null;
+    let finalWidth = image.width;
+    let finalHeight = image.height;
+
+    for (let attempt = 0; attempt < 12; attempt++) {
+
+        const width = Math.max(1, Math.round(image.width * scale));
+        const height = Math.max(1, Math.round(image.height * scale));
+
+        progressFill.style.width =
+            Math.min(90, 10 + attempt * 7) + "%";
+
+        progressText.textContent =
+            "Processing " + width + " × " + height + " px...";
+
+        /*
+         * Find the highest quality that stays
+         * below the requested file size.
+         */
+        if (type === "image/png") {
+
+            const blob = await makeBlob(
+                width,
+                height,
+                type,
+                1
+            );
+
+            if (blob.size <= targetBytes) {
+                finalBlob = blob;
+                finalWidth = width;
+                finalHeight = height;
+                break;
+            }
+
+        } else {
+
+            let low = 0.05;
+            let high = 1;
+            let best = null;
+
+            for (let i = 0; i < 7; i++) {
+
+                const quality = (low + high) / 2;
+
+                const blob = await makeBlob(
+                    width,
+                    height,
+                    type,
+                    quality
+                );
+
+                if (blob.size <= targetBytes) {
+                    best = blob;
+                    low = quality;
+                } else {
+                    high = quality;
+                }
+            }
+
+            if (best) {
+                finalBlob = best;
+                finalWidth = width;
+                finalHeight = height;
+
+                /*
+                 * If we are reasonably close to target,
+                 * stop here.
+                 */
+                if (best.size >= targetBytes * 0.90) {
+                    break;
+                }
+            }
+        }
+
+        /*
+         * Only reduce dimensions when necessary.
+         * Small 10% steps preserve resolution.
+         */
+        scale *= 0.90;
+
+        await new Promise(function(resolve) {
+            setTimeout(resolve, 10);
+        });
+    }
+
+    progressFill.style.width = "100%";
+
+    if (!finalBlob) {
+
+        progressText.textContent = "Unable to reach target.";
+
+        resizeBtn.disabled = false;
+
+        setTimeout(function() {
+            progress.style.display = "none";
+        }, 800);
+
+        alert(
+            "This target is too small for this image. " +
+            "Please try a larger target size."
+        );
+
+        return;
+    }
+
+    resultBlob = finalBlob;
+
+    const actualKB = finalBlob.size / 1024;
 
     document.getElementById("originalSize").textContent =
         formatBytes(originalFile.size);
 
     document.getElementById("newSize").textContent =
-        formatBytes(bestBlob.size);
+        formatBytes(finalBlob.size);
 
     document.getElementById("dimensions").textContent =
-        bestWidth + " × " + bestHeight + " px";
-
-    const actualKB = bestBlob.size / 1024;
+        finalWidth + " × " + finalHeight + " px";
 
     document.getElementById("note").textContent =
         "Target: " +
         targetKB.toFixed(0) +
         " KB • Result: " +
         actualKB.toFixed(2) +
-        " KB • Dimensions: " +
-        bestWidth +
-        " × " +
-        bestHeight +
-        " px";
+        " KB";
 
     result.style.display = "block";
+
+    progressText.textContent = "Finished.";
 
     resizeBtn.disabled = false;
 
@@ -907,7 +1081,7 @@ resizeBtn.addEventListener("click", async function() {
 });
 
 
-function createBlob(width, height, type, quality) {
+function makeBlob(width, height, type, quality) {
 
     return new Promise(function(resolve) {
 
@@ -931,13 +1105,9 @@ function createBlob(width, height, type, quality) {
             height
         );
 
-        canvas.toBlob(
-            function(blob) {
-                resolve(blob);
-            },
-            type,
-            quality
-        );
+        canvas.toBlob(function(blob) {
+            resolve(blob);
+        }, type, quality);
     });
 }
 
@@ -961,7 +1131,7 @@ downloadBtn.addEventListener("click", function() {
 
     a.download =
         "utilitycanvas-" +
-        (targetInput.value || "resized") +
+        targetInput.value +
         "kb." +
         ext;
 
@@ -986,9 +1156,7 @@ resetBtn.addEventListener("click", function() {
     resultBlob = null;
 
     resizeBtn.disabled = true;
-
     result.style.display = "none";
-
     progress.style.display = "none";
 
     progressFill.style.width = "0%";
