@@ -246,7 +246,7 @@ header{
 }
 
 /* DECORATION */
-
+ 
 .side-note{
   align-self:start;
   padding-top:30px;
@@ -267,6 +267,31 @@ header{
   background:#4e54b7;
   transform:rotate(-5deg);
 }
+
+/* MOBILE / SMALL SCREEN */
+@media (max-width:1100px){
+  .side-note{
+    display:none !important;
+  }
+}
+
+/* KEEP BACKGROUND INSIDE THE HERO AREA */
+body::before{
+  height:850px !important;
+  bottom:auto !important;
+}
+
+/* SOLID CONTENT + FOOTER */
+.info-section,
+footer{
+  position:relative;
+  z-index:5;
+}
+
+footer{
+  background:#111827 !important;
+}
+
   /* FINAL MOBILE FIX */
 @media (max-width: 900px){
 
