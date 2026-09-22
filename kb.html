@@ -4,9 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<meta name="description" content="Free online image resizer to 20KB, 50KB, 100KB, 200KB and 500KB. Resize JPG, PNG and WebP images directly in your browser.">
-
 <title>Resize Image to Exact KB - UtilityCanvas</title>
+
+<meta name="description" content="Resize images toward 20KB, 50KB, 100KB, 200KB or 500KB directly in your browser. Free, fast and private image compression.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://utilitycanvas.pages.dev/kb.html">
 
 <style>
 *{
@@ -15,60 +17,146 @@
   padding:0;
 }
 
+html{
+  scroll-behavior:smooth;
+}
+
 body{
   font-family:Arial,Helvetica,sans-serif;
-  background:#f7f8fc;
   color:#172033;
   line-height:1.6;
+  background:#fff;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:850px;
+  z-index:-1;
+  background:
+    linear-gradient(
+      rgba(238,244,251,.78),
+      rgba(238,244,251,.86)
+    ),
+    url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=2400&q=85")
+    center top / cover no-repeat;
 }
 
 a{
-  text-decoration:none;
   color:inherit;
+  text-decoration:none;
 }
 
 .container{
-  width:min(900px,92%);
+  width:min(1180px,calc(100% - 32px));
   margin:auto;
 }
 
+/* HEADER */
+
 header{
-  background:#fff;
-  border-bottom:1px solid #e8eaf0;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(220,227,238,.9);
+  position:sticky;
+  top:0;
+  z-index:100;
 }
 
 .nav{
-  min-height:70px;
+  min-height:78px;
   display:flex;
   align-items:center;
   justify-content:space-between;
+  gap:20px;
 }
 
-.logo{
-  font-size:24px;
+.brand{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.brand-icon{
+  width:30px;
+  height:34px;
+  background:linear-gradient(145deg,#6859e8,#5546c7);
+  clip-path:polygon(0 0,100% 18%,100% 100%,0 82%);
+  position:relative;
+}
+
+.brand-icon::after{
+  content:"";
+  position:absolute;
+  left:5px;
+  top:5px;
+  width:5px;
+  height:24px;
+  background:rgba(255,255,255,.5);
+}
+
+.brand-name{
+  font-size:20px;
   font-weight:800;
 }
 
-.logo span{
+.brand-name span{
   color:#635bff;
+}
+
+.brand-tag{
+  display:block;
+  font-size:8px;
+  color:#687083;
+  margin-top:-3px;
 }
 
 .nav-links{
   display:flex;
+  align-items:center;
   gap:25px;
-  font-size:14px;
-  color:#596273;
+  font-size:13px;
+  color:#273044;
 }
 
+.all-tools{
+  background:#635bff;
+  color:white;
+  padding:11px 17px;
+  border-radius:8px;
+  font-weight:700;
+  box-shadow:0 8px 18px rgba(99,91,255,.25);
+}
+
+/* HERO */
+
 .hero{
-  padding:60px 0 35px;
+  padding:25px 0 20px;
   text-align:center;
-  background:linear-gradient(180deg,#fff 0%,#f7f8fc 100%);
+}
+
+.badge{
+  display:inline-block;
+  padding:6px 13px;
+  border-radius:30px;
+  background:rgba(255,255,255,.82);
+  border:1px solid rgba(220,225,240,.8);
+  box-shadow:0 5px 15px rgba(30,50,90,.06);
+  font-size:11px;
+  font-weight:700;
+  color:#43506a;
 }
 
 .hero h1{
-  font-size:40px;
+  margin-top:12px;
+  font-size:38px;
   line-height:1.15;
+  letter-spacing:-1px;
 }
 
 .hero h1 span{
@@ -76,106 +164,197 @@ header{
 }
 
 .hero p{
-  max-width:700px;
-  margin:18px auto;
+  max-width:720px;
+  margin:12px auto 0;
+  color:#596273;
+  font-size:14px;
+}
+
+/* MAIN TOOL AREA */
+
+.tool-area{
+  display:grid;
+  grid-template-columns:150px minmax(0,700px) 150px;
+  align-items:center;
+  justify-content:center;
+  gap:22px;
+  margin:5px auto 0;
+}
+
+.feature-column{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.feature{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.feature-icon{
+  flex:0 0 42px;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:rgba(255,255,255,.82);
+  box-shadow:0 5px 16px rgba(30,50,90,.12);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:19px;
+}
+
+.feature strong{
+  display:block;
+  font-size:12px;
+}
+
+.feature small{
+  display:block;
+  font-size:9px;
+  line-height:1.25;
   color:#687083;
 }
 
+.side-note{
+  color:#4e54b7;
+  font-size:30px;
+  font-style:italic;
+  font-family:cursive;
+  transform:rotate(-7deg);
+  text-align:center;
+}
+
+.side-note::after{
+  content:"";
+  display:block;
+  width:95px;
+  height:3px;
+  margin:7px auto;
+  background:#4e54b7;
+  transform:rotate(-5deg);
+}
+
+/* TOOL CARD */
+
 .tool-box{
-  background:#fff;
-  border:1px solid #e4e7ef;
-  border-radius:18px;
-  padding:25px;
-  margin:25px auto 70px;
-  box-shadow:0 8px 30px rgba(20,30,60,.05);
+  background:rgba(255,255,255,.96);
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:22px;
+  padding:18px;
+  box-shadow:
+    0 18px 55px rgba(31,53,90,.18),
+    0 3px 12px rgba(31,53,90,.08);
 }
 
 .drop{
-  border:2px dashed #d5d8e8;
-  border-radius:14px;
-  padding:45px 20px;
+  min-height:145px;
+  border:2px dashed #766cf4;
+  border-radius:15px;
+  background:rgba(250,251,255,.9);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
   text-align:center;
-  background:#fafaff;
+  padding:20px;
+  cursor:pointer;
+}
+
+.drop-icon{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#eeeaff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:8px;
+  color:#635bff;
 }
 
 .drop strong{
-  display:block;
-  font-size:17px;
-  margin-bottom:6px;
+  font-size:14px;
 }
 
 .drop small{
-  color:#7b8495;
+  color:#687083;
+  font-size:10px;
+  margin-top:3px;
 }
 
 .file-input{
   display:block;
   width:100%;
-  margin-top:18px;
-  padding:10px;
-  border:1px solid #dfe2eb;
-  border-radius:9px;
-  background:#fff;
+  margin-top:10px;
+  font-size:11px;
 }
 
-.field{
-  margin-top:20px;
+.controls{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:14px;
 }
 
 .field label{
   display:block;
-  font-size:13px;
+  font-size:11px;
   font-weight:700;
-  margin-bottom:7px;
+  margin-bottom:6px;
 }
 
 .field input,
 .field select{
   width:100%;
-  padding:12px;
-  border:1px solid #dfe2eb;
+  height:40px;
+  padding:8px 11px;
+  border:1px solid #dfe3ed;
   border-radius:9px;
-  font-size:16px;
+  font-size:14px;
   background:#fff;
+  outline:none;
 }
 
 .presets{
   display:grid;
   grid-template-columns:repeat(5,1fr);
-  gap:8px;
-  margin-top:10px;
+  gap:6px;
+  margin-top:7px;
 }
 
 .preset{
+  padding:8px 3px;
+  border-radius:8px;
   background:#eef0f7;
   color:#30384a;
-  padding:10px 5px;
-  border-radius:8px;
   text-align:center;
   font-weight:700;
+  font-size:10px;
   cursor:pointer;
-  font-size:13px;
 }
 
 .preset.active{
   background:#dddfff;
-  color:#3030a0;
+  color:#403bb0;
 }
 
 .actions{
   display:flex;
-  gap:10px;
-  margin-top:20px;
-  flex-wrap:wrap;
+  gap:9px;
+  margin-top:15px;
 }
 
 button{
   border:0;
   border-radius:9px;
-  padding:12px 18px;
+  padding:11px 16px;
   background:#635bff;
-  color:#fff;
+  color:white;
   font-weight:700;
+  font-size:12px;
   cursor:pointer;
 }
 
@@ -191,84 +370,280 @@ button:disabled{
 
 .status{
   display:none;
-  margin-top:20px;
-  padding:14px;
-  background:#f8f9fd;
-  border-radius:10px;
+  margin-top:12px;
+  padding:10px;
+  border-radius:9px;
+  background:#f4f5fb;
   color:#596273;
-  font-size:14px;
+  font-size:12px;
 }
 
 .result{
   display:none;
-  margin-top:20px;
-  padding:18px;
-  background:#f8f9fd;
+  margin-top:14px;
+  padding:14px;
   border-radius:12px;
+  background:#f5f6fb;
+}
+
+.result-title{
+  font-size:13px;
+  font-weight:800;
 }
 
 .stats{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-top:15px;
+  gap:8px;
+  margin-top:10px;
 }
 
 .stat{
   background:#fff;
-  padding:15px;
-  border-radius:10px;
+  padding:10px 5px;
+  border-radius:9px;
   text-align:center;
 }
 
 .stat strong{
   display:block;
-  font-size:18px;
+  font-size:14px;
 }
 
 .stat small{
   color:#7b8495;
+  font-size:9px;
 }
 
 .note{
-  margin-top:14px;
+  margin-top:8px;
   color:#687083;
-  font-size:13px;
+  font-size:10px;
 }
 
+/* BOTTOM FEATURES */
+
+.bottom-features{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  margin:15px auto 25px;
+}
+
+.bottom-feature{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.bottom-icon{
+  width:40px;
+  height:40px;
+  flex:0 0 40px;
+  border-radius:50%;
+  background:rgba(255,255,255,.86);
+  box-shadow:0 5px 15px rgba(30,50,90,.1);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.bottom-feature strong{
+  display:block;
+  font-size:10px;
+}
+
+.bottom-feature small{
+  display:block;
+  color:#687083;
+  font-size:8px;
+}
+
+/* INFO */
+
 .info{
-  padding:50px 0;
   background:#fff;
+  padding:38px 0 45px;
+  position:relative;
+  z-index:2;
 }
 
 .info h2{
-  text-align:center;
+  font-size:20px;
   margin-bottom:12px;
 }
 
-.info p{
-  color:#687083;
-  max-width:760px;
-  margin:10px auto;
+.info h3{
+  font-size:14px;
+  margin-top:22px;
+  margin-bottom:7px;
 }
 
-@media(max-width:650px){
+.info p,
+.info li{
+  color:#687083;
+  font-size:12px;
+}
 
-  .hero h1{
-    font-size:33px;
+.info ul{
+  padding-left:20px;
+}
+
+/* FOOTER */
+
+footer{
+  position:relative;
+  z-index:5;
+  background:#111827;
+  color:#d7dce6;
+  text-align:center;
+  padding:16px;
+  font-size:10px;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+  body::before{
+    height:780px;
   }
 
-  .presets{
-    grid-template-columns:repeat(3,1fr);
+  .nav{
+    min-height:54px;
   }
 
-  .stats{
-    grid-template-columns:1fr;
+  .brand-icon{
+    width:23px;
+    height:28px;
+  }
+
+  .brand-name{
+    font-size:16px;
+  }
+
+  .brand-tag{
+    font-size:6px;
   }
 
   .nav-links{
-    gap:12px;
+    gap:15px;
+    font-size:10px;
+  }
+
+  .all-tools{
+    display:none;
+  }
+
+  .hero{
+    padding:24px 0 16px;
+  }
+
+  .hero h1{
+    font-size:31px;
+  }
+
+  .hero p{
     font-size:12px;
+    padding:0 10px;
+  }
+
+  .tool-area{
+    display:block;
+    margin:0 auto;
+  }
+
+  .feature-column,
+  .side-note{
+    display:none;
+  }
+
+  .tool-box{
+    width:100%;
+    padding:15px;
+    border-radius:18px;
+  }
+
+  .drop{
+    min-height:135px;
+  }
+
+  .controls{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  .presets{
+    grid-template-columns:repeat(5,1fr);
+  }
+
+  .actions{
+    flex-wrap:wrap;
+  }
+
+  .actions button{
+    flex:1;
+  }
+
+  .bottom-features{
+    grid-template-columns:repeat(2,1fr);
+    gap:13px;
+    margin-top:14px;
+  }
+
+  .info{
+    padding:35px 0 40px;
+  }
+
+  .info h2{
+    font-size:19px;
+  }
+
+  .info p,
+  .info li{
+    font-size:11px;
+  }
+}
+
+@media(max-width:480px){
+
+  .container{
+    width:calc(100% - 20px);
+  }
+
+  .nav-links a:nth-child(3){
+    display:none;
+  }
+
+  .hero h1{
+    font-size:29px;
+  }
+
+  .presets{
+    gap:4px;
+  }
+
+  .preset{
+    font-size:9px;
+    padding:8px 1px;
+  }
+
+  .bottom-feature{
+    gap:6px;
+  }
+
+  .bottom-icon{
+    width:34px;
+    height:34px;
+    flex-basis:34px;
+  }
+
+  .bottom-feature strong{
+    font-size:9px;
+  }
+
+  .bottom-feature small{
+    font-size:7px;
   }
 }
 </style>
@@ -279,145 +654,236 @@ button:disabled{
 <header>
   <div class="container nav">
 
-    <a href="index.html" class="logo">
-      Utility<span>Canvas</span>
+    <a href="index.html" class="brand">
+      <span class="brand-icon"></span>
+      <span>
+        <span class="brand-name">Utility<span>Canvas</span></span>
+        <span class="brand-tag">Simple Tools for a Smarter You</span>
+      </span>
     </a>
 
     <div class="nav-links">
       <a href="index.html">Home</a>
       <a href="index.html#tools">Tools</a>
       <a href="index.html#about">About</a>
+      <a href="index.html#tools" class="all-tools">▦ &nbsp; All Tools</a>
     </div>
 
   </div>
 </header>
 
 <section class="hero">
+
   <div class="container">
+
+    <div class="badge">
+      Fast • Free • 100% Private
+    </div>
 
     <h1>
       Resize Image to <span>Exact KB</span>
     </h1>
 
     <p>
-      Reduce an image toward a target file size such as
-      20KB, 50KB, 100KB, 200KB or 500KB directly in your browser.
+      Reduce JPG, PNG and WebP images toward your target file size.
+      Choose 20KB, 50KB, 100KB, 200KB or 500KB and download instantly.
     </p>
 
   </div>
+
 </section>
 
 <main class="container">
 
-  <div class="tool-box">
+  <div class="tool-area">
 
-    <div class="drop">
+    <div class="feature-column">
 
-      <strong>📁 Choose an image</strong>
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <div>
+          <strong>Fast</strong>
+          <small>Works instantly in your browser</small>
+        </div>
+      </div>
 
-      <small>
-        JPG, PNG or WebP • Your image stays in your browser
-      </small>
+      <div class="feature">
+        <div class="feature-icon">🛡</div>
+        <div>
+          <strong>Private</strong>
+          <small>Your images never leave your device</small>
+        </div>
+      </div>
 
-      <input
-        id="file"
-        class="file-input"
-        type="file"
-        accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
-      >
-
-    </div>
-
-    <div class="field">
-
-      <label for="target">
-        Target file size (KB)
-      </label>
-
-      <input
-        id="target"
-        type="number"
-        min="5"
-        max="5000"
-        value="100"
-      >
-
-      <div class="presets">
-
-        <div class="preset" data-size="20">20 KB</div>
-        <div class="preset" data-size="50">50 KB</div>
-        <div class="preset" data-size="100">100 KB</div>
-        <div class="preset" data-size="200">200 KB</div>
-        <div class="preset" data-size="500">500 KB</div>
-
+      <div class="feature">
+        <div class="feature-icon">♥</div>
+        <div>
+          <strong>Free</strong>
+          <small>No signup, no limits</small>
+        </div>
       </div>
 
     </div>
 
-    <div class="field">
+    <div class="tool-box">
 
-      <label for="format">
-        Output format
-      </label>
+      <div class="drop">
 
-      <select id="format">
+        <div class="drop-icon">☁</div>
 
-        <option value="image/jpeg">JPG</option>
-        <option value="image/webp">WebP</option>
+        <strong>Choose your image</strong>
 
-      </select>
+        <small>
+          JPG, PNG or WebP • Processing happens in your browser
+        </small>
 
-    </div>
+        <input
+          id="file"
+          class="file-input"
+          type="file"
+          accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+        >
 
-    <div class="actions">
+      </div>
 
-      <button id="resize" disabled>
-        Resize to Target KB
-      </button>
+      <div class="field" style="margin-top:14px;">
 
-      <button id="reset" class="secondary">
-        Reset
-      </button>
+        <label for="target">
+          Target file size (KB)
+        </label>
 
-    </div>
+        <input
+          id="target"
+          type="number"
+          min="5"
+          max="5000"
+          value="100"
+        >
 
-    <div class="status" id="status">
-      Processing image...
-    </div>
+        <div class="presets">
 
-    <div class="result" id="result">
+          <div class="preset" data-size="20">20 KB</div>
+          <div class="preset" data-size="50">50 KB</div>
+          <div class="preset" data-size="100">100 KB</div>
+          <div class="preset" data-size="200">200 KB</div>
+          <div class="preset" data-size="500">500 KB</div>
 
-      <strong>Image ready</strong>
-
-      <div class="stats">
-
-        <div class="stat">
-          <strong id="originalSize">—</strong>
-          <small>Original</small>
-        </div>
-
-        <div class="stat">
-          <strong id="newSize">—</strong>
-          <small>Result</small>
-        </div>
-
-        <div class="stat">
-          <strong id="dimensions">—</strong>
-          <small>Dimensions</small>
         </div>
 
       </div>
 
-      <p class="note" id="note"></p>
+      <div class="controls">
+
+        <div class="field">
+
+          <label for="format">
+            Output Format
+          </label>
+
+          <select id="format">
+            <option value="image/jpeg">JPG</option>
+            <option value="image/webp">WebP</option>
+          </select>
+
+        </div>
+
+      </div>
 
       <div class="actions">
 
-        <button id="download">
-          Download Image
+        <button id="resize" disabled>
+          Resize to Target KB
+        </button>
+
+        <button id="reset" class="secondary">
+          Reset
         </button>
 
       </div>
 
+      <div class="status" id="status">
+        Processing image...
+      </div>
+
+      <div class="result" id="result">
+
+        <div class="result-title">
+          Image ready
+        </div>
+
+        <div class="stats">
+
+          <div class="stat">
+            <strong id="originalSize">—</strong>
+            <small>Original</small>
+          </div>
+
+          <div class="stat">
+            <strong id="newSize">—</strong>
+            <small>Result</small>
+          </div>
+
+          <div class="stat">
+            <strong id="dimensions">—</strong>
+            <small>Dimensions</small>
+          </div>
+
+        </div>
+
+        <p class="note" id="note"></p>
+
+        <div class="actions">
+
+          <button id="download">
+            Download Image
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="side-note">
+      Resize<br>
+      Compress<br>
+      Do More
+    </div>
+
+  </div>
+
+  <div class="bottom-features">
+
+    <div class="bottom-feature">
+      <div class="bottom-icon">🔒</div>
+      <div>
+        <strong>100% Private</strong>
+        <small>All processing happens in your browser</small>
+      </div>
+    </div>
+
+    <div class="bottom-feature">
+      <div class="bottom-icon">⚡</div>
+      <div>
+        <strong>Super Fast</strong>
+        <small>Get results instantly</small>
+      </div>
+    </div>
+
+    <div class="bottom-feature">
+      <div class="bottom-icon">★</div>
+      <div>
+        <strong>High Quality</strong>
+        <small>Preserve image quality</small>
+      </div>
+    </div>
+
+    <div class="bottom-feature">
+      <div class="bottom-icon">▯</div>
+      <div>
+        <strong>Works on All Devices</strong>
+        <small>Mobile, tablet and desktop</small>
+      </div>
     </div>
 
   </div>
@@ -429,22 +895,45 @@ button:disabled{
   <div class="container">
 
     <h2>
-      Resize images to a target file size
+      Resize Images to a Target File Size
     </h2>
 
     <p>
-      UtilityCanvas helps reduce images toward a target file size
+      UtilityCanvas helps you reduce images toward a target file size
       such as 20KB, 50KB, 100KB, 200KB or 500KB.
     </p>
 
+    <h3>How to resize an image to a specific KB size</h3>
+
+    <ul>
+      <li>Choose a JPG, PNG or WebP image.</li>
+      <li>Select or enter your target file size.</li>
+      <li>Choose JPG or WebP output.</li>
+      <li>Click Resize to Target KB.</li>
+      <li>Download the processed image.</li>
+    </ul>
+
+    <h3>Private browser-based processing</h3>
+
     <p>
-      Image processing happens directly in your browser.
-      Your image does not need to be uploaded to a server.
+      Your image is processed directly inside your browser.
+      The image does not need to be uploaded to a server.
+    </p>
+
+    <h3>Supported target sizes</h3>
+
+    <p>
+      The tool supports 20KB, 50KB, 100KB, 200KB and 500KB presets,
+      as well as custom target sizes.
     </p>
 
   </div>
 
 </section>
+
+<footer>
+  © 2026 UtilityCanvas · Free Image & Creator Tools
+</footer>
 
 <script>
 
@@ -454,7 +943,6 @@ const formatInput = document.getElementById("format");
 
 const resizeBtn = document.getElementById("resize");
 const resetBtn = document.getElementById("reset");
-
 const statusBox = document.getElementById("status");
 const resultBox = document.getElementById("result");
 
@@ -469,10 +957,7 @@ let image = null;
 let originalFile = null;
 let resultBlob = null;
 
-
-/* =========================
-   PRESET BUTTONS
-========================= */
+/* PRESETS */
 
 document.querySelectorAll(".preset").forEach(function(button){
 
@@ -490,10 +975,7 @@ document.querySelectorAll(".preset").forEach(function(button){
 
 });
 
-
-/* =========================
-   IMAGE UPLOAD
-========================= */
+/* IMAGE UPLOAD */
 
 fileInput.addEventListener("change",function(){
 
@@ -514,9 +996,7 @@ fileInput.addEventListener("change",function(){
     img.onload = function(){
 
       image = img;
-
       resizeBtn.disabled = false;
-
       resultBox.style.display = "none";
 
     };
@@ -525,7 +1005,6 @@ fileInput.addEventListener("change",function(){
 
       image = null;
       resizeBtn.disabled = true;
-
       alert("This image could not be loaded.");
 
     };
@@ -544,10 +1023,7 @@ fileInput.addEventListener("change",function(){
 
 });
 
-
-/* =========================
-   MAIN RESIZE FUNCTION
-========================= */
+/* MAIN RESIZE */
 
 resizeBtn.addEventListener("click",async function(){
 
@@ -564,34 +1040,17 @@ resizeBtn.addEventListener("click",async function(){
   }
 
   const targetBytes = targetKB * 1024;
-
   const type = formatInput.value;
 
   resizeBtn.disabled = true;
-
   resultBox.style.display = "none";
-
   statusBox.style.display = "block";
-
   statusBox.textContent = "Preparing image...";
 
-
-  /*
-   * We use a small number of calculations so the tool
-   * remains fast on mobile phones.
-   *
-   * First keep the original dimensions and change quality.
-   * Only reduce dimensions if quality alone cannot reach
-   * the requested size.
-   */
-
   let scale = 1;
-
   let bestBlob = null;
-
   let bestWidth = image.width;
   let bestHeight = image.height;
-
 
   for(let round = 0; round < 12; round++){
 
@@ -605,20 +1064,8 @@ resizeBtn.addEventListener("click",async function(){
       Math.round(image.height * scale)
     );
 
-
     statusBox.textContent =
-      "Processing " +
-      width +
-      " × " +
-      height +
-      " px...";
-
-
-    /*
-     * Try quality values from high to low.
-     *
-     * This is deliberately simple and mobile-friendly.
-     */
+      "Processing " + width + " × " + height + " px...";
 
     const qualities = [
       0.95,
@@ -632,9 +1079,7 @@ resizeBtn.addEventListener("click",async function(){
       0.15
     ];
 
-
     let closest = null;
-
 
     for(let i = 0; i < qualities.length; i++){
 
@@ -645,27 +1090,16 @@ resizeBtn.addEventListener("click",async function(){
         qualities[i]
       );
 
-
       if(blob.size <= targetBytes){
 
         closest = blob;
-
-        /*
-         * Higher quality is preferable.
-         * Stop at the first quality that fits.
-         */
-
         break;
-      }
 
-      /*
-       * Keep the smallest result we have seen.
-       */
+      }
 
       if(!bestBlob || blob.size < bestBlob.size){
 
         bestBlob = blob;
-
         bestWidth = width;
         bestHeight = height;
 
@@ -673,41 +1107,26 @@ resizeBtn.addEventListener("click",async function(){
 
     }
 
-
     if(closest){
 
       bestBlob = closest;
-
       bestWidth = width;
       bestHeight = height;
-
       break;
 
     }
 
-
-    /*
-     * Still too large.
-     *
-     * Reduce dimensions by 15% and try again.
-     */
-
     scale *= 0.85;
 
-
     await new Promise(function(resolve){
-
       setTimeout(resolve,20);
-
     });
 
   }
 
-
   if(!bestBlob){
 
     statusBox.style.display = "none";
-
     resizeBtn.disabled = false;
 
     alert(
@@ -716,13 +1135,8 @@ resizeBtn.addEventListener("click",async function(){
     );
 
     return;
+
   }
-
-
-  /*
-   * If the best result is still larger than target,
-   * continue with a smaller dimension until it fits.
-   */
 
   if(bestBlob.size > targetBytes){
 
@@ -743,7 +1157,6 @@ resizeBtn.addEventListener("click",async function(){
       statusBox.textContent =
         "Adjusting image size...";
 
-
       const blob = await createImageBlob(
         width,
         height,
@@ -751,27 +1164,22 @@ resizeBtn.addEventListener("click",async function(){
         0.35
       );
 
-
       if(blob.size <= targetBytes){
 
         bestBlob = blob;
-
         bestWidth = width;
         bestHeight = height;
-
         break;
+
       }
 
     }
 
   }
 
-
   resultBlob = bestBlob;
 
-
   const actualKB = bestBlob.size / 1024;
-
 
   originalSizeBox.textContent =
     formatBytes(originalFile.size);
@@ -780,11 +1188,7 @@ resizeBtn.addEventListener("click",async function(){
     formatBytes(bestBlob.size);
 
   dimensionsBox.textContent =
-    bestWidth +
-    " × " +
-    bestHeight +
-    " px";
-
+    bestWidth + " × " + bestHeight + " px";
 
   noteBox.textContent =
     "Target: " +
@@ -793,19 +1197,13 @@ resizeBtn.addEventListener("click",async function(){
     actualKB.toFixed(2) +
     " KB";
 
-
   resultBox.style.display = "block";
-
   statusBox.style.display = "none";
-
   resizeBtn.disabled = false;
 
 });
 
-
-/* =========================
-   CREATE IMAGE
-========================= */
+/* CREATE IMAGE */
 
 function createImageBlob(
   width,
@@ -822,15 +1220,8 @@ function createImageBlob(
     canvas.width = width;
     canvas.height = height;
 
-
     const ctx =
       canvas.getContext("2d");
-
-
-    /*
-     * JPG needs a white background because
-     * JPG does not support transparency.
-     */
 
     if(type === "image/jpeg"){
 
@@ -845,7 +1236,6 @@ function createImageBlob(
 
     }
 
-
     ctx.drawImage(
       image,
       0,
@@ -854,12 +1244,9 @@ function createImageBlob(
       height
     );
 
-
     canvas.toBlob(
       function(blob){
-
         resolve(blob);
-
       },
       type,
       quality
@@ -869,10 +1256,7 @@ function createImageBlob(
 
 }
 
-
-/* =========================
-   DOWNLOAD
-========================= */
+/* DOWNLOAD */
 
 downloadBtn.addEventListener("click",function(){
 
@@ -880,20 +1264,16 @@ downloadBtn.addEventListener("click",function(){
     return;
   }
 
-
   const extension =
     formatInput.value === "image/webp"
       ? "webp"
       : "jpg";
 
-
   const url =
     URL.createObjectURL(resultBlob);
 
-
   const link =
     document.createElement("a");
-
 
   link.href = url;
 
@@ -903,13 +1283,11 @@ downloadBtn.addEventListener("click",function(){
     "kb." +
     extension;
 
-
   document.body.appendChild(link);
 
   link.click();
 
   link.remove();
-
 
   setTimeout(function(){
 
@@ -919,51 +1297,35 @@ downloadBtn.addEventListener("click",function(){
 
 });
 
-
-/* =========================
-   RESET
-========================= */
+/* RESET */
 
 resetBtn.addEventListener("click",function(){
 
   fileInput.value = "";
-
   targetInput.value = "100";
 
   image = null;
-
   originalFile = null;
-
   resultBlob = null;
 
   resizeBtn.disabled = true;
 
   resultBox.style.display = "none";
-
   statusBox.style.display = "none";
 
-
   document.querySelectorAll(".preset").forEach(function(item){
-
     item.classList.remove("active");
-
   });
 
 });
 
-
-/* =========================
-   FORMAT BYTES
-========================= */
+/* FORMAT BYTES */
 
 function formatBytes(bytes){
 
   if(bytes < 1024){
-
     return bytes + " B";
-
   }
-
 
   if(bytes < 1024 * 1024){
 
@@ -972,7 +1334,6 @@ function formatBytes(bytes){
     ).toFixed(2) + " KB";
 
   }
-
 
   return (
     bytes / 1024 / 1024
