@@ -271,144 +271,161 @@ Resize images for websites, social media, documents and other everyday digital t
 </section>
 
 <script>
-const fileInput=document.getElementById("file");
-const drop=document.getElementById("drop");
-const widthInput=document.getElementById("width");
-const heightInput=document.getElementById("height");
-const lock=document.getElementById("lock");
-const format=document.getElementById("format");
-const quality=document.getElementById("quality");
-const resizeBtn=document.getElementById("resize");
-const resetBtn=document.getElementById("reset");
-const result=document.getElementById("result");
-const downloadBtn=document.getElementById("download");
+const fileInput = document.getElementById("file");
+const widthInput = document.getElementById("width");
+const heightInput = document.getElementById("height");
+const lock = document.getElementById("lock");
+const format = document.getElementById("format");
+const quality = document.getElementById("quality");
+const resizeBtn = document.getElementById("resize");
+const resetBtn = document.getElementById("reset");
+const result = document.getElementById("result");
+const downloadBtn = document.getElementById("download");
 
-let image=null;
-let originalFile=null;
-let resizedBlob=null;
-let ratio=1;
+let image = null;
+let originalFile = null;
+let resizedBlob = null;
+let ratio = 1;
 
-drop.onclick=()=>fileInput.click();
+fileInput.addEventListener("change", function () {
+    const file = this.files && this.files[0];
 
-fileInput.onchange=()=>{
-if(!fileInput.files.length)return;
-loadImage(fileInput.files[0]);
-};
+    if (!file) return;
 
-function loadImage(file){
-if(!file.type.match(/^image\\/(jpeg|png|webp)$/)){
-alert("Please choose a JPG, PNG or WebP image.");
-return;
-}
+    originalFile = file;
 
-originalFile=file;
+    const reader = new FileReader();
 
-const url=URL.createObjectURL(file);
-const img=new Image();
+    reader.onload = function (event) {
+        const img = new Image();
 
-img.onload=()=>{
-image=img;
-ratio=img.width/img.height;
+        img.onload = function () {
+            image = img;
+            ratio = img.width / img.height;
 
-widthInput.value=img.width;
-heightInput.value=img.height;
+            widthInput.value = img.width;
+            heightInput.value = img.height;
 
-resizeBtn.disabled=false;
-result.style.display="none";
+            resizeBtn.disabled = false;
+            result.style.display = "none";
+        };
 
-URL.revokeObjectURL(url);
-};
+        img.onerror = function () {
+            alert("This image could not be loaded. Please choose a JPG, PNG or WebP image.");
+        };
 
-img.src=url;
-}
+        img.src = event.target.result;
+    };
 
-widthInput.oninput=()=>{
-if(lock.checked && image){
-heightInput.value=Math.round(widthInput.value/ratio);
-}
-};
+    reader.onerror = function () {
+        alert("Unable to read this image.");
+    };
 
-heightInput.oninput=()=>{
-if(lock.checked && image){
-widthInput.value=Math.round(heightInput.value*ratio);
-}
-};
+    reader.readAsDataURL(file);
+});
 
-resizeBtn.onclick=()=>{
-if(!image)return;
+widthInput.addEventListener("input", function () {
+    if (lock.checked && image && widthInput.value) {
+        heightInput.value = Math.round(widthInput.value / ratio);
+    }
+});
 
-const w=parseInt(widthInput.value);
-const h=parseInt(heightInput.value);
+heightInput.addEventListener("input", function () {
+    if (lock.checked && image && heightInput.value) {
+        widthInput.value = Math.round(heightInput.value * ratio);
+    }
+});
 
-if(!w||!h||w<1||h<1){
-alert("Please enter valid dimensions.");
-return;
-}
+resizeBtn.addEventListener("click", function () {
+    if (!image) return;
 
-const canvas=document.createElement("canvas");
-canvas.width=w;
-canvas.height=h;
+    const w = parseInt(widthInput.value);
+    const h = parseInt(heightInput.value);
 
-const ctx=canvas.getContext("2d");
+    if (!w || !h || w < 1 || h < 1) {
+        alert("Please enter valid dimensions.");
+        return;
+    }
 
-if(format.value==="image/jpeg"){
-ctx.fillStyle="#ffffff";
-ctx.fillRect(0,0,w,h);
-}
+    const canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
 
-ctx.drawImage(image,0,0,w,h);
+    const ctx = canvas.getContext("2d");
 
-canvas.toBlob(blob=>{
-if(!blob)return;
+    if (format.value === "image/jpeg") {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, w, h);
+    }
 
-resizedBlob=blob;
+    ctx.drawImage(image, 0, 0, w, h);
 
-document.getElementById("filename").textContent=
-"Resized image ready";
+    canvas.toBlob(function (blob) {
+        if (!blob) {
+            alert("Unable to create the resized image.");
+            return;
+        }
 
-document.getElementById("originalSize").textContent=
-formatBytes(originalFile.size);
+        resizedBlob = blob;
 
-document.getElementById("newSize").textContent=
-formatBytes(blob.size);
+        document.getElementById("filename").textContent =
+            "Resized image ready";
 
-document.getElementById("dimensions").textContent=
-w+" × "+h+" px";
+        document.getElementById("originalSize").textContent =
+            formatBytes(originalFile.size);
 
-result.style.display="block";
-},format.value,parseInt(quality.value)/100);
-};
+        document.getElementById("newSize").textContent =
+            formatBytes(blob.size);
 
-downloadBtn.onclick=()=>{
-if(!resizedBlob)return;
+        document.getElementById("dimensions").textContent =
+            w + " × " + h + " px";
 
-const ext=
-format.value==="image/png"?"png":
-format.value==="image/webp"?"webp":"jpg";
+        result.style.display = "block";
+    }, format.value, parseInt(quality.value) / 100);
+});
 
-const a=document.createElement("a");
-a.href=URL.createObjectURL(resizedBlob);
-a.download="utilitycanvas-resized."+ext;
-a.click();
+downloadBtn.addEventListener("click", function () {
+    if (!resizedBlob) return;
 
-setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-};
+    const ext =
+        format.value === "image/png" ? "png" :
+        format.value === "image/webp" ? "webp" : "jpg";
 
-resetBtn.onclick=()=>{
-fileInput.value="";
-image=null;
-originalFile=null;
-resizedBlob=null;
-resizeBtn.disabled=true;
-result.style.display="none";
-widthInput.value="";
-heightInput.value="";
-};
+    const url = URL.createObjectURL(resizedBlob);
+    const a = document.createElement("a");
 
-function formatBytes(bytes){
-if(bytes<1024)return bytes+" B";
-if(bytes<1024*1024)return (bytes/1024).toFixed(2)+" KB";
-return (bytes/1024/1024).toFixed(2)+" MB";
+    a.href = url;
+    a.download = "utilitycanvas-resized." + ext;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    setTimeout(function () {
+        URL.revokeObjectURL(url);
+    }, 1000);
+});
+
+resetBtn.addEventListener("click", function () {
+    fileInput.value = "";
+    image = null;
+    originalFile = null;
+    resizedBlob = null;
+
+    resizeBtn.disabled = true;
+    result.style.display = "none";
+
+    widthInput.value = "";
+    heightInput.value = "";
+});
+
+function formatBytes(bytes) {
+    if (bytes < 1024) return bytes + " B";
+
+    if (bytes < 1024 * 1024) {
+        return (bytes / 1024).toFixed(2) + " KB";
+    }
+
+    return (bytes / 1024 / 1024).toFixed(2) + " MB";
 }
 </script>
 
