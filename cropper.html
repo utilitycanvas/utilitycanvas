@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<meta name="description" content="Free online image cropper. Crop JPG, PNG and WebP images to custom dimensions directly in your browser.">
+
+<title>Image Cropper - UtilityCanvas</title>
+
+<style>
+*{
+box-sizing:border-box;
+margin:0;
+padding:0
+}
+
+body{
+font-family:Arial,Helvetica,sans-serif;
+background:#f7f8fc;
+color:#172033;
+line-height:1.6
+}
+
+a{
+text-decoration:none;
+color:inherit
+}
+
+.container{
+width:min(900px,92%);
+margin:auto
+}
+
+header{
+background:#fff;
+border-bottom:1px solid #e8eaf0
+}
+
+.nav{
+min-height:70px;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.logo{
+font-size:24px;
+font-weight:800
+}
+
+.logo span{
+color:#635bff
+}
+
+.nav-links{
+display:flex;
+gap:25px;
+font-size:14px;
+color:#596273
+}
+
+.hero{
+padding:60px 0 35px;
+text-align:center;
+background:linear-gradient(180deg,#fff 0%,#f7f8fc 100%)
+}
+
+.hero h1{
+font-size:40px;
+line-height:1.15
+}
+
+.hero h1 span{
+color:#635bff
+}
+
+.hero p{
+max-width:700px;
+margin:18px auto;
+color:#687083
+}
+
+.tool-box{
+background:#fff;
+border:1px solid #e4e7ef;
+border-radius:18px;
+padding:25px;
+margin:25px auto 70px;
+box-shadow:0 8px 30px rgba(20,30,60,.05)
+}
+
+.drop{
+border:2px dashed #d5d8e8;
+border-radius:14px;
+padding:45px 20px;
+text-align:center;
+background:#fafaff
+}
+
+.drop strong{
+display:block;
+font-size:17px;
+margin-bottom:6px
+}
+
+.drop small{
+color:#7b8495
+}
+
+.file-input{
+display:block;
+width:100%;
+margin-top:18px;
+padding:10px;
+border:1px solid #dfe2eb;
+border-radius:9px;
+background:#fff
+}
+
+.preview-wrap{
+display:none;
+margin-top:20px;
+background:#f1f3f8;
+border-radius:14px;
+padding:15px;
+overflow:hidden
+}
+
+.canvas-wrap{
+position:relative;
+width:100%;
+overflow:hidden;
+border-radius:10px;
+background:#222;
+text-align:center
+}
+
+#preview{
+display:block;
+max-width:100%;
+height:auto;
+margin:auto
+}
+
+.controls{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+margin-top:20px
+}
+
+.field label{
+display:block;
+font-size:13px;
+font-weight:700;
+margin-bottom:7px
+}
+
+.field input,
+.field select{
+width:100%;
+padding:12px;
+border:1px solid #dfe2eb;
+border-radius:9px;
+font-size:15px;
+background:#fff
+}
+
+.presets{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+margin-top:10px
+}
+
+.preset{
+background:#eef0f7;
+color:#30384a;
+padding:10px 5px;
+border-radius:8px;
+text-align:center;
+font-weight:700;
+cursor:pointer;
+font-size:13px
+}
+
+.preset.active{
+background:#dddfff;
+color:#3330a0
+}
+
+.actions{
+display:flex;
+gap:10px;
+margin-top:20px;
+flex-wrap:wrap
+}
+
+button{
+border:0;
+border-radius:9px;
+padding:12px 18px;
+background:#635bff;
+color:white;
+font-weight:700;
+cursor:pointer
+}
+
+button.secondary{
+background:#eef0f7;
+color:#30384a
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed
+}
+
+.result{
+margin-top:20px;
+padding:18px;
+background:#f8f9fd;
+border-radius:12px;
+display:none
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:15px
+}
+
+.stat{
+background:#fff;
+padding:15px;
+border-radius:10px;
+text-align:center
+}
+
+.stat strong{
+display:block;
+font-size:18px
+}
+
+.stat small{
+color:#7b8495
+}
+
+.info{
+padding:50px 0;
+background:#fff
+}
+
+.info h2{
+text-align:center;
+margin-bottom:12px
+}
+
+.info p{
+color:#687083;
+max-width:760px;
+margin:10px auto
+}
+
+@media(max-width:650px){
+
+.hero h1{
+font-size:33px
+}
+
+.controls{
+grid-template-columns:1fr
+}
+
+.presets{
+grid-template-columns:repeat(2,1fr)
+}
+
+.stats{
+grid-template-columns:1fr
+}
+
+.nav-links{
+gap:12px;
+font-size:12px
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="container nav">
+
+<a href="index.html" class="logo">
+Utility<span>Canvas</span>
+</a>
+
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="index.html#tools">Tools</a>
+<a href="index.html#about">About</a>
+</div>
+
+</div>
+</header>
+
+<section class="hero">
+
+<div class="container">
+
+<h1>
+Free <span>Image Cropper</span>
+</h1>
+
+<p>
+Crop JPG, PNG and WebP images to custom dimensions directly in your browser.
+</p>
+
+</div>
+
+</section>
+
+<main class="container">
+
+<div class="tool-box">
+
+<div class="drop">
+
+<strong>📁 Choose an image</strong>
+
+<small>
+JPG, PNG or WebP • Your image stays in your browser
+</small>
+
+<input
+id="file"
+class="file-input"
+type="file"
+accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+>
+
+</div>
+
+
+<div class="preview-wrap" id="previewWrap">
+
+<div class="canvas-wrap">
+
+<canvas id="preview"></canvas>
+
+</div>
+
+</div>
+
+
+<div class="controls">
+
+<div class="field">
+
+<label>Crop X (px)</label>
+
+<input
+id="cropX"
+type="number"
+min="0"
+value="0"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>Crop Y (px)</label>
+
+<input
+id="cropY"
+type="number"
+min="0"
+value="0"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>Crop Width (px)</label>
+
+<input
+id="cropWidth"
+type="number"
+min="1"
+value="1"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>Crop Height (px)</label>
+
+<input
+id="cropHeight"
+type="number"
+min="1"
+value="1"
+>
+
+</div>
+
+</div>
+
+
+<div class="field">
+
+<label>Quick crop ratio</label>
+
+<div class="presets">
+
+<div class="preset active" data-ratio="free">
+Free
+</div>
+
+<div class="preset" data-ratio="1">
+1 : 1
+</div>
+
+<div class="preset" data-ratio="1.7777778">
+16 : 9
+</div>
+
+<div class="preset" data-ratio="1.3333333">
+4 : 3
+</div>
+
+</div>
+
+</div>
+
+
+<div class="field">
+
+<label>Output format</label>
+
+<select id="format">
+
+<option value="image/jpeg">JPG</option>
+
+<option value="image/png">PNG</option>
+
+<option value="image/webp">WebP</option>
+
+</select>
+
+</div>
+
+
+<div class="actions">
+
+<button id="crop" disabled>
+Crop Image
+</button>
+
+<button id="reset" class="secondary">
+Reset
+</button>
+
+</div>
+
+
+<div class="result" id="result">
+
+<strong>Cropped image ready</strong>
+
+<div class="stats">
+
+<div class="stat">
+
+<strong id="originalSize">—</strong>
+
+<small>Original</small>
+
+</div>
+
+<div class="stat">
+
+<strong id="newSize">—</strong>
+
+<small>Cropped</small>
+
+</div>
+
+<div class="stat">
+
+<strong id="dimensions">—</strong>
+
+<small>Dimensions</small>
+
+</div>
+
+</div>
+
+<div class="actions">
+
+<button id="download">
+Download Image
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+
+<section class="info">
+
+<div class="container">
+
+<h2>
+Simple browser-based image cropping
+</h2>
+
+<p>
+Crop images to custom dimensions or use common ratios such as 1:1, 16:9 and 4:3.
+</p>
+
+<p>
+Your image is processed directly in your browser and does not need to be uploaded to a server.
+</p>
+
+</div>
+
+</section>
+
+
+<script>
+
+const fileInput =
+document.getElementById("file");
+
+const previewWrap =
+document.getElementById("previewWrap");
+
+const canvas =
+document.getElementById("preview");
+
+const ctx =
+canvas.getContext("2d");
+
+const cropX =
+document.getElementById("cropX");
+
+const cropY =
+document.getElementById("cropY");
+
+const cropWidth =
+document.getElementById("cropWidth");
+
+const cropHeight =
+document.getElementById("cropHeight");
+
+const format =
+document.getElementById("format");
+
+const cropBtn =
+document.getElementById("crop");
+
+const resetBtn =
+document.getElementById("reset");
+
+const result =
+document.getElementById("result");
+
+const downloadBtn =
+document.getElementById("download");
+
+let image = null;
+
+let originalFile = null;
+
+let resultBlob = null;
+
+let selectedRatio = "free";
+
+
+/* =========================
+   LOAD IMAGE
+========================= */
+
+fileInput.addEventListener("change",function(){
+
+const file =
+this.files && this.files[0];
+
+if(!file){
+return;
+}
+
+originalFile = file;
+
+const reader =
+new FileReader();
+
+reader.onload =
+function(event){
+
+const img =
+new Image();
+
+img.onload =
+function(){
+
+image = img;
+
+cropX.value = 0;
+
+cropY.value = 0;
+
+cropWidth.value =
+img.width;
+
+cropHeight.value =
+img.height;
+
+previewWrap.style.display =
+"block";
+
+cropBtn.disabled = false;
+
+result.style.display =
+"none";
+
+drawPreview();
+
+};
+
+img.onerror =
+function(){
+
+alert(
+"This image could not be loaded."
+);
+
+};
+
+img.src =
+event.target.result;
+
+};
+
+reader.onerror =
+function(){
+
+alert(
+"Unable to read this image."
+);
+
+};
+
+reader.readAsDataURL(file);
+
+});
+
+
+/* =========================
+   PRESET RATIOS
+========================= */
+
+document.querySelectorAll(".preset")
+.forEach(function(button){
+
+button.addEventListener("click",
+function(){
+
+document.querySelectorAll(".preset")
+.forEach(function(item){
+
+item.classList.remove("active");
+
+});
+
+button.classList.add("active");
+
+selectedRatio =
+button.dataset.ratio;
+
+if(!image){
+return;
+}
+
+if(selectedRatio === "free"){
+
+cropWidth.value =
+image.width;
+
+cropHeight.value =
+image.height;
+
+}
+else{
+
+const ratio =
+Number(selectedRatio);
+
+let width =
+Number(cropWidth.value);
+
+let height =
+Math.round(width / ratio);
+
+if(height > image.height){
+
+height =
+image.height;
+
+width =
+Math.round(height * ratio);
+
+}
+
+cropWidth.value =
+width;
+
+cropHeight.value =
+height;
+
+}
+
+drawPreview();
+
+});
+
+});
+
+
+/* =========================
+   INPUT CHANGES
+========================= */
+
+[
+cropX,
+cropY,
+cropWidth,
+cropHeight
+].forEach(function(input){
+
+input.addEventListener(
+"input",
+function(){
+
+if(image){
+drawPreview();
+}
+
+});
+
+});
+
+
+/* =========================
+   DRAW PREVIEW
+========================= */
+
+function drawPreview(){
+
+if(!image){
+return;
+}
+
+let x =
+parseInt(cropX.value) || 0;
+
+let y =
+parseInt(cropY.value) || 0;
+
+let w =
+parseInt(cropWidth.value) || image.width;
+
+let h =
+parseInt(cropHeight.value) || image.height;
+
+
+/*
+ * Keep crop inside the image.
+ */
+
+x =
+Math.max(0,Math.min(x,image.width - 1));
+
+y =
+Math.max(0,Math.min(y,image.height - 1));
+
+w =
+Math.max(1,Math.min(w,image.width - x));
+
+h =
+Math.max(1,Math.min(h,image.height - y));
+
+
+cropX.value = x;
+
+cropY.value = y;
+
+cropWidth.value = w;
+
+cropHeight.value = h;
+
+
+/*
+ * Preview is scaled down for mobile.
+ */
+
+const maxWidth = 800;
+
+const scale =
+Math.min(
+1,
+maxWidth / w
+);
+
+canvas.width =
+Math.round(w * scale);
+
+canvas.height =
+Math.round(h * scale);
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+ctx.drawImage(
+image,
+x,
+y,
+w,
+h,
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+}
+
+
+/* =========================
+   CROP IMAGE
+========================= */
+
+cropBtn.addEventListener("click",
+function(){
+
+if(!image){
+return;
+}
+
+let x =
+parseInt(cropX.value);
+
+let y =
+parseInt(cropY.value);
+
+let w =
+parseInt(cropWidth.value);
+
+let h =
+parseInt(cropHeight.value);
+
+
+if(
+isNaN(x) ||
+isNaN(y) ||
+isNaN(w) ||
+isNaN(h) ||
+w < 1 ||
+h < 1
+){
+
+alert(
+"Please enter valid crop dimensions."
+);
+
+return;
+
+}
+
+
+if(
+x < 0 ||
+y < 0 ||
+x + w > image.width ||
+y + h > image.height
+){
+
+alert(
+"The crop area must stay inside the image."
+);
+
+return;
+
+}
+
+
+const output =
+document.createElement("canvas");
+
+output.width = w;
+
+output.height = h;
+
+
+const outputCtx =
+output.getContext("2d");
+
+
+if(format.value ===
+"image/jpeg"){
+
+outputCtx.fillStyle =
+"#ffffff";
+
+outputCtx.fillRect(
+0,
+0,
+w,
+h
+);
+
+}
+
+
+outputCtx.drawImage(
+image,
+x,
+y,
+w,
+h,
+0,
+0,
+w,
+h
+);
+
+
+output.toBlob(
+function(blob){
+
+if(!blob){
+
+alert(
+"Unable to create the cropped image."
+);
+
+return;
+
+}
+
+resultBlob = blob;
+
+
+document.getElementById(
+"originalSize"
+).textContent =
+formatBytes(
+originalFile.size
+);
+
+
+document.getElementById(
+"newSize"
+).textContent =
+formatBytes(
+blob.size
+);
+
+
+document.getElementById(
+"dimensions"
+).textContent =
+w +
+" × " +
+h +
+" px";
+
+
+result.style.display =
+"block";
+
+},
+format.value,
+0.92
+);
+
+});
+
+
+/* =========================
+   DOWNLOAD
+========================= */
+
+downloadBtn.addEventListener(
+"click",
+function(){
+
+if(!resultBlob){
+return;
+}
+
+const extension =
+format.value === "image/png"
+? "png"
+: format.value === "image/webp"
+? "webp"
+: "jpg";
+
+
+const url =
+URL.createObjectURL(
+resultBlob
+);
+
+
+const link =
+document.createElement("a");
+
+link.href = url;
+
+link.download =
+"utilitycanvas-cropped." +
+extension;
+
+
+document.body.appendChild(link);
+
+link.click();
+
+link.remove();
+
+
+setTimeout(function(){
+
+URL.revokeObjectURL(url);
+
+},1000);
+
+});
+
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+"click",
+function(){
+
+fileInput.value = "";
+
+image = null;
+
+originalFile = null;
+
+resultBlob = null;
+
+previewWrap.style.display =
+"none";
+
+result.style.display =
+"none";
+
+cropBtn.disabled =
+true;
+
+cropX.value = 0;
+
+cropY.value = 0;
+
+cropWidth.value = 1;
+
+cropHeight.value = 1;
+
+
+document.querySelectorAll(
+".preset"
+).forEach(function(item){
+
+item.classList.remove("active");
+
+});
+
+
+document.querySelector(
+'.preset[data-ratio="free"]'
+).classList.add("active");
+
+selectedRatio = "free";
+
+});
+
+
+/* =========================
+   FORMAT BYTES
+========================= */
+
+function formatBytes(bytes){
+
+if(bytes < 1024){
+
+return bytes + " B";
+
+}
+
+if(bytes < 1024 * 1024){
+
+return (
+bytes / 1024
+).toFixed(2) + " KB";
+
+}
+
+return (
+bytes / 1024 / 1024
+).toFixed(2) + " MB";
+
+}
+
+</script>
+
+</body>
+</html>
