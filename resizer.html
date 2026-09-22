@@ -2,158 +2,552 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="description" content="Free online image resizer. Resize JPG, PNG and WebP images directly in your browser.">
-<title>Image Resizer - UtilityCanvas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Free Image Resizer — Resize JPG, PNG & WebP | UtilityCanvas</title>
+
+<meta name="description" content="Resize JPG, PNG and WebP images online for free. Set exact dimensions, preserve aspect ratio, choose output format and download instantly in your browser.">
+
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://utilitycanvas.pages.dev/resizer.html">
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
 body{
-font-family:Arial,Helvetica,sans-serif;
-background:#f7f8fc;
-color:#172033;
-line-height:1.6
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f7f8fc;
+  color:#172033;
+  line-height:1.6;
 }
-a{text-decoration:none;color:inherit}
-.container{width:min(900px,92%);margin:auto}
 
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+.container{
+  width:min(100% - 32px, 980px);
+  margin:auto;
+}
+
+/* HEADER */
 header{
-background:#fff;
-border-bottom:1px solid #e8eaf0;
-position:sticky;
-top:0;
-z-index:20
+  background:#fff;
+  border-bottom:1px solid #e5e9f0;
+  position:sticky;
+  top:0;
+  z-index:100;
 }
+
 .nav{
-min-height:70px;
-display:flex;
-align-items:center;
-justify-content:space-between
+  min-height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
 }
-.logo{font-size:24px;font-weight:800}
-.logo span{color:#635bff}
-.nav-links{display:flex;gap:25px;font-size:14px;color:#596273}
 
+.logo{
+  font-size:23px;
+  font-weight:800;
+  color:#635bff;
+  white-space:nowrap;
+}
+
+.nav-links{
+  display:flex;
+  gap:24px;
+  font-size:14px;
+  color:#596273;
+}
+
+.nav-links a:hover{
+  color:#635bff;
+}
+
+/* HERO */
 .hero{
-padding:65px 0 35px;
-text-align:center;
-background:linear-gradient(180deg,#fff 0%,#f7f8fc 100%)
+  padding:58px 20px 34px;
+  text-align:center;
+  background:linear-gradient(180deg,#fff 0%,#f7f8fc 100%);
 }
-.hero h1{font-size:42px;line-height:1.1}
-.hero h1 span{color:#635bff}
-.hero p{max-width:650px;margin:18px auto;color:#687083}
 
+.hero h1{
+  font-size:42px;
+  line-height:1.15;
+  margin-bottom:14px;
+  color:#172033;
+}
+
+.hero p{
+  max-width:680px;
+  margin:auto;
+  color:#687083;
+  font-size:17px;
+}
+
+/* TOOL CARD */
 .tool-box{
-background:#fff;
-border:1px solid #e4e7ef;
-border-radius:18px;
-padding:25px;
-margin:25px auto 70px;
-box-shadow:0 8px 30px rgba(20,30,60,.05)
+  background:#fff;
+  border:1px solid #e4e8f0;
+  border-radius:20px;
+  padding:28px;
+  margin:24px auto 50px;
+  box-shadow:0 8px 30px rgba(20,30,60,.07);
 }
 
+/* UPLOAD */
 .drop{
-border:2px dashed #d5d8e8;
-border-radius:14px;
-padding:55px 20px;
-text-align:center;
-cursor:pointer;
-background:#fafaff
+  position:relative;
+  width:100%;
+  min-height:190px;
+  border:2px dashed #d5dce8;
+  border-radius:16px;
+  background:#fafbff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:28px 20px;
+  cursor:pointer;
+  transition:.2s ease;
 }
-.drop:hover{border-color:#635bff}
-  .drop{position:relative}
+
+.drop:hover,
+.drop.dragover{
+  border-color:#635bff;
+  background:#f5f4ff;
+}
+
+.drop-content{
+  pointer-events:none;
+}
+
+.upload-icon{
+  width:52px;
+  height:52px;
+  margin:0 auto 12px;
+  border-radius:14px;
+  background:#eeeefe;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+}
+
+.drop strong{
+  display:block;
+  font-size:17px;
+  margin-bottom:5px;
+}
+
+.drop small{
+  color:#7b8495;
+  font-size:13px;
+}
+
 .drop input{
-position:absolute;
-inset:0;
-width:100%;
-height:100%;
-opacity:0;
-cursor:pointer
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  opacity:0;
+  cursor:pointer;
 }
-.drop strong{display:block;font-size:17px;margin-bottom:6px}
-.drop small{color:#7b8495}
 
+/* PREVIEW */
+.preview-wrap{
+  display:none;
+  margin-top:24px;
+  padding:18px;
+  border:1px solid #e5e9f0;
+  border-radius:16px;
+  background:#fafbfc;
+}
+
+.preview-wrap.show{
+  display:block;
+}
+
+.preview-title{
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:12px;
+}
+
+.preview{
+  width:100%;
+  max-height:360px;
+  object-fit:contain;
+  display:block;
+  border-radius:10px;
+  background:
+    linear-gradient(45deg,#eee 25%,transparent 25%),
+    linear-gradient(-45deg,#eee 25%,transparent 25%),
+    linear-gradient(45deg,transparent 75%,#eee 75%),
+    linear-gradient(-45deg,transparent 75%,#eee 75%);
+  background-size:20px 20px;
+  background-position:0 0,0 10px,10px -10px,-10px 0;
+}
+
+/* CONTROLS */
 .controls{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px;
-margin-top:20px
-}
-.field label{
-display:block;
-font-size:13px;
-font-weight:700;
-margin-bottom:7px
-}
-.field input,.field select{
-width:100%;
-padding:12px;
-border:1px solid #dfe2eb;
-border-radius:9px;
-font-size:15px;
-background:#fff
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+  margin-top:24px;
 }
 
-.checkbox{
-margin-top:15px;
-display:flex;
-align-items:center;
-gap:8px;
-font-size:14px
+.control{
+  min-width:0;
 }
 
-.actions{
-display:flex;
-gap:10px;
-margin-top:20px;
-flex-wrap:wrap
+.control.full{
+  grid-column:1 / -1;
 }
-button{
-border:0;
-border-radius:9px;
-padding:12px 18px;
-background:#635bff;
-color:white;
-font-weight:700;
-cursor:pointer
-}
-button.secondary{background:#eef0f7;color:#30384a}
-button:disabled{opacity:.5;cursor:not-allowed}
 
+label{
+  display:block;
+  font-size:13px;
+  font-weight:700;
+  color:#465064;
+  margin-bottom:7px;
+}
+
+input[type="number"],
+select{
+  width:100%;
+  height:48px;
+  padding:0 13px;
+  border:1px solid #dce2ec;
+  border-radius:10px;
+  background:#fff;
+  color:#172033;
+  font-size:15px;
+  outline:none;
+}
+
+input[type="number"]:focus,
+select:focus{
+  border-color:#635bff;
+  box-shadow:0 0 0 3px rgba(99,91,255,.10);
+}
+
+/* DIMENSIONS */
+.dimension-row{
+  display:grid;
+  grid-template-columns:1fr 52px 1fr;
+  gap:10px;
+  align-items:end;
+}
+
+.lock{
+  width:52px;
+  height:48px;
+  border:1px solid #dce2ec;
+  border-radius:10px;
+  background:#f8f9fc;
+  cursor:pointer;
+  font-size:18px;
+}
+
+.lock.active{
+  background:#eeeefe;
+  border-color:#635bff;
+}
+
+/* QUALITY */
+.quality-value{
+  font-weight:700;
+  color:#635bff;
+}
+
+input[type="range"]{
+  width:100%;
+  margin-top:8px;
+  accent-color:#635bff;
+}
+
+/* FILE INFO */
+.file-info{
+  display:none;
+  margin-top:22px;
+  padding:16px;
+  background:#f7f8fc;
+  border-radius:12px;
+  border:1px solid #e7eaf1;
+}
+
+.file-info.show{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.info-item{
+  text-align:center;
+}
+
+.info-item span{
+  display:block;
+  font-size:12px;
+  color:#7b8495;
+  margin-bottom:3px;
+}
+
+.info-item strong{
+  font-size:14px;
+}
+
+/* BUTTON */
+.resize-btn{
+  width:100%;
+  height:52px;
+  margin-top:24px;
+  border:0;
+  border-radius:11px;
+  background:#635bff;
+  color:#fff;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.resize-btn:hover{
+  background:#5149e8;
+  transform:translateY(-1px);
+}
+
+.resize-btn:disabled{
+  background:#b9bdd0;
+  cursor:not-allowed;
+  transform:none;
+}
+
+/* RESULT */
 .result{
-margin-top:20px;
-padding:18px;
-background:#f8f9fd;
-border-radius:12px;
-display:none
+  display:none;
+  margin-top:24px;
+  padding:20px;
+  border-radius:14px;
+  background:#f2fbf6;
+  border:1px solid #ccebd9;
 }
-.stats{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
-margin-top:15px
-}
-.stat{
-background:#fff;
-padding:15px;
-border-radius:10px;
-text-align:center
-}
-.stat strong{display:block;font-size:18px}
-.stat small{color:#7b8495}
 
-.info{
-padding:50px 0;
-background:#fff
+.result.show{
+  display:block;
 }
-.info h2{text-align:center;margin-bottom:12px}
-.info p{color:#687083;max-width:760px;margin:10px auto}
 
-@media(max-width:650px){
-.hero h1{font-size:34px}
-.controls{grid-template-columns:1fr}
-.stats{grid-template-columns:1fr}
-.nav-links{gap:12px;font-size:12px}
+.result h2{
+  font-size:18px;
+  margin-bottom:12px;
+  color:#167447;
+}
+
+.result-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.result-item{
+  background:#fff;
+  border:1px solid #e0eee6;
+  border-radius:10px;
+  padding:12px;
+  text-align:center;
+}
+
+.result-item span{
+  display:block;
+  font-size:12px;
+  color:#718078;
+}
+
+.result-item strong{
+  font-size:14px;
+}
+
+.download{
+  display:block;
+  width:100%;
+  text-align:center;
+  padding:13px 18px;
+  border-radius:10px;
+  background:#16834e;
+  color:#fff;
+  font-weight:700;
+}
+
+.download:hover{
+  background:#126d41;
+}
+
+/* ERROR */
+.error{
+  display:none;
+  margin-top:18px;
+  padding:13px 15px;
+  border-radius:10px;
+  background:#fff1f1;
+  border:1px solid #f1caca;
+  color:#b42323;
+  font-size:14px;
+}
+
+.error.show{
+  display:block;
+}
+
+/* CONTENT */
+.info-section{
+  background:#fff;
+  border-top:1px solid #e7eaf0;
+  padding:45px 0;
+}
+
+.info-section h2{
+  font-size:25px;
+  margin-bottom:14px;
+}
+
+.info-section h3{
+  font-size:18px;
+  margin:28px 0 8px;
+}
+
+.info-section p{
+  color:#687083;
+  margin-bottom:12px;
+}
+
+.info-section ul{
+  padding-left:20px;
+  color:#687083;
+}
+
+.info-section li{
+  margin-bottom:7px;
+}
+
+/* FOOTER */
+footer{
+  background:#111827;
+  color:#aeb7c7;
+  text-align:center;
+  padding:28px 16px;
+  font-size:13px;
+}
+
+footer a{
+  color:#d9ddff;
+}
+
+/* MOBILE */
+@media(max-width:700px){
+
+  .container{
+    width:min(100% - 24px,980px);
+  }
+
+  .nav{
+    min-height:62px;
+  }
+
+  .logo{
+    font-size:20px;
+  }
+
+  .nav-links{
+    gap:12px;
+    font-size:12px;
+  }
+
+  .hero{
+    padding:40px 12px 25px;
+  }
+
+  .hero h1{
+    font-size:31px;
+  }
+
+  .hero p{
+    font-size:15px;
+  }
+
+  .tool-box{
+    padding:16px;
+    border-radius:16px;
+    margin-top:16px;
+  }
+
+  .drop{
+    min-height:175px;
+    padding:24px 14px;
+  }
+
+  .controls{
+    grid-template-columns:1fr;
+    gap:16px;
+  }
+
+  .control.full{
+    grid-column:auto;
+  }
+
+  .dimension-row{
+    grid-template-columns:1fr 48px 1fr;
+  }
+
+  .file-info.show{
+    grid-template-columns:1fr;
+  }
+
+  .result-grid{
+    grid-template-columns:1fr;
+  }
+
+  .preview{
+    max-height:280px;
+  }
+
+  .info-section{
+    padding:35px 0;
+  }
+
+  .info-section h2{
+    font-size:22px;
+  }
+}
+
+@media(max-width:420px){
+
+  .nav-links{
+    gap:8px;
+  }
+
+  .nav-links a:nth-child(3){
+    display:none;
+  }
+
+  .hero h1{
+    font-size:28px;
+  }
+
+  .tool-box{
+    padding:13px;
+  }
 }
 </style>
 </head>
@@ -161,272 +555,580 @@ background:#fff
 <body>
 
 <header>
-<div class="container nav">
-<a href="index.html" class="logo">Utility<span>Canvas</span></a>
-<div class="nav-links">
-<a href="index.html">Home</a>
-<a href="index.html#tools">Tools</a>
-<a href="index.html#about">About</a>
-</div>
-</div>
+  <div class="container nav">
+    <a class="logo" href="index.html">UtilityCanvas</a>
+
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="index.html#tools">Tools</a>
+      <a href="#about">About</a>
+    </nav>
+  </div>
 </header>
 
+<main>
+
 <section class="hero">
-<div class="container">
-<h1>Free <span>Image Resizer</span></h1>
-<p>Resize JPG, PNG and WebP images to exact dimensions directly in your browser.</p>
-</div>
+  <div class="container">
+    <h1>Free Image Resizer</h1>
+    <p>
+      Resize JPG, PNG and WebP images online. Set your exact dimensions,
+      preserve the aspect ratio, choose the output format and download instantly.
+    </p>
+  </div>
 </section>
 
-<main class="container">
+<section class="container">
 
 <div class="tool-box">
 
-<label class="drop" id="drop">
-<strong>📁 Choose an image</strong>
-<small>JPG, PNG or WebP • Your file stays in your browser</small>
-<input id="file" type="file" accept="image/jpeg,image/png,image/webp">
-</label>
+  <label class="drop" id="dropZone">
+    <div class="drop-content">
+      <div class="upload-icon">↑</div>
+      <strong>Drop your image here</strong>
+      <small>or tap to choose a JPG, PNG or WebP image</small>
+    </div>
 
-<div class="controls">
+    <input
+      type="file"
+      id="fileInput"
+      accept="image/jpeg,image/png,image/webp"
+    >
+  </label>
 
-<div class="field">
-<label>Width (px)</label>
-<input id="width" type="number" min="1" placeholder="Width">
+  <div class="preview-wrap" id="previewWrap">
+    <div class="preview-title">Image Preview</div>
+    <img id="preview" class="preview" alt="Selected image preview">
+  </div>
+
+  <div class="controls">
+
+    <div class="control">
+      <label for="width">Width (px)</label>
+
+      <div class="dimension-row">
+        <input
+          type="number"
+          id="width"
+          min="1"
+          max="10000"
+          placeholder="Width"
+        >
+
+        <button
+          type="button"
+          class="lock active"
+          id="lockBtn"
+          title="Lock aspect ratio"
+        >🔒</button>
+
+        <input
+          type="number"
+          id="height"
+          min="1"
+          max="10000"
+          placeholder="Height"
+        >
+      </div>
+    </div>
+
+    <div class="control">
+      <label for="format">Output Format</label>
+
+      <select id="format">
+        <option value="image/jpeg">JPG</option>
+        <option value="image/png">PNG</option>
+        <option value="image/webp">WebP</option>
+      </select>
+    </div>
+
+    <div class="control full">
+      <label for="quality">
+        Quality:
+        <span class="quality-value" id="qualityValue">90%</span>
+      </label>
+
+      <input
+        type="range"
+        id="quality"
+        min="10"
+        max="100"
+        value="90"
+      >
+    </div>
+
+  </div>
+
+  <div class="file-info" id="fileInfo">
+
+    <div class="info-item">
+      <span>Original Size</span>
+      <strong id="originalSize">—</strong>
+    </div>
+
+    <div class="info-item">
+      <span>Original Dimensions</span>
+      <strong id="originalDimensions">—</strong>
+    </div>
+
+    <div class="info-item">
+      <span>File Type</span>
+      <strong id="originalType">—</strong>
+    </div>
+
+  </div>
+
+  <button
+    type="button"
+    class="resize-btn"
+    id="resizeBtn"
+    disabled
+  >
+    Resize Image
+  </button>
+
+  <div class="error" id="error"></div>
+
+  <div class="result" id="result">
+
+    <h2>✓ Image Resized Successfully</h2>
+
+    <div class="result-grid">
+
+      <div class="result-item">
+        <span>Output Size</span>
+        <strong id="outputSize">—</strong>
+      </div>
+
+      <div class="result-item">
+        <span>Dimensions</span>
+        <strong id="outputDimensions">—</strong>
+      </div>
+
+      <div class="result-item">
+        <span>Format</span>
+        <strong id="outputFormat">—</strong>
+      </div>
+
+    </div>
+
+    <a
+      id="downloadBtn"
+      class="download"
+      href="#"
+      download="utilitycanvas-resized-image"
+    >
+      Download Resized Image
+    </a>
+
+  </div>
+
 </div>
 
-<div class="field">
-<label>Height (px)</label>
-<input id="height" type="number" min="1" placeholder="Height">
-</div>
+</section>
 
-<div class="field">
-<label>Output format</label>
-<select id="format">
-<option value="image/jpeg">JPG</option>
-<option value="image/png">PNG</option>
-<option value="image/webp">WebP</option>
-</select>
-</div>
+<section class="info-section" id="about">
+  <div class="container">
 
-<div class="field">
-<label>Quality</label>
-<input id="quality" type="number" min="10" max="100" value="90">
-</div>
+    <h2>Resize Images Online for Free</h2>
 
-</div>
+    <p>
+      UtilityCanvas Image Resizer lets you resize images directly in your
+      browser without uploading your files to a server.
+    </p>
 
-<label class="checkbox">
-<input type="checkbox" id="lock" checked>
-Lock aspect ratio
-</label>
+    <h3>How to resize an image</h3>
 
-<div class="actions">
-<button id="resize" disabled>Resize Image</button>
-<button id="reset" class="secondary">Reset</button>
-</div>
+    <ul>
+      <li>Choose a JPG, PNG or WebP image.</li>
+      <li>Enter the desired width and height.</li>
+      <li>Keep the lock enabled to preserve the original aspect ratio.</li>
+      <li>Select your preferred output format and quality.</li>
+      <li>Click <strong>Resize Image</strong>.</li>
+      <li>Download your resized image.</li>
+    </ul>
 
-<div class="result" id="result">
+    <h3>Private browser-based processing</h3>
 
-<strong id="filename"></strong>
+    <p>
+      Your image is processed directly inside your browser. The image does
+      not need to be uploaded to a server for resizing.
+    </p>
 
-<div class="stats">
-<div class="stat">
-<strong id="originalSize">—</strong>
-<small>Original</small>
-</div>
+    <h3>Supported formats</h3>
 
-<div class="stat">
-<strong id="newSize">—</strong>
-<small>Resized</small>
-</div>
+    <p>
+      JPG, PNG and WebP images are supported for resizing and conversion.
+    </p>
 
-<div class="stat">
-<strong id="dimensions">—</strong>
-<small>Dimensions</small>
-</div>
-</div>
-
-<div class="actions">
-<button id="download">Download Image</button>
-</div>
-
-</div>
-
-</div>
+  </div>
+</section>
 
 </main>
 
-<section class="info" id="about">
-<div class="container">
-<h2>Fast, simple and privacy-friendly</h2>
-<p>
-UtilityCanvas Image Resizer processes your image directly in your browser.
-Your image does not need to be uploaded to a server.
-</p>
-<p>
-Resize images for websites, social media, documents and other everyday digital tasks.
-</p>
-</div>
-</section>
+<footer>
+  <div>
+    © 2026 UtilityCanvas ·
+    <a href="index.html">Free Image & Creator Tools</a>
+  </div>
+</footer>
 
 <script>
-const fileInput = document.getElementById("file");
+const fileInput = document.getElementById("fileInput");
+const dropZone = document.getElementById("dropZone");
+
 const widthInput = document.getElementById("width");
 const heightInput = document.getElementById("height");
-const lock = document.getElementById("lock");
-const format = document.getElementById("format");
-const quality = document.getElementById("quality");
-const resizeBtn = document.getElementById("resize");
-const resetBtn = document.getElementById("reset");
+
+const lockBtn = document.getElementById("lockBtn");
+const formatSelect = document.getElementById("format");
+
+const qualityInput = document.getElementById("quality");
+const qualityValue = document.getElementById("qualityValue");
+
+const resizeBtn = document.getElementById("resizeBtn");
+
+const previewWrap = document.getElementById("previewWrap");
+const preview = document.getElementById("preview");
+
+const fileInfo = document.getElementById("fileInfo");
+const originalSize = document.getElementById("originalSize");
+const originalDimensions = document.getElementById("originalDimensions");
+const originalType = document.getElementById("originalType");
+
 const result = document.getElementById("result");
-const downloadBtn = document.getElementById("download");
+const outputSize = document.getElementById("outputSize");
+const outputDimensions = document.getElementById("outputDimensions");
+const outputFormat = document.getElementById("outputFormat");
 
-let image = null;
-let originalFile = null;
-let resizedBlob = null;
-let ratio = 1;
+const downloadBtn = document.getElementById("downloadBtn");
+const errorBox = document.getElementById("error");
 
-fileInput.addEventListener("change", function () {
-    const file = this.files && this.files[0];
+let selectedFile = null;
+let sourceImage = null;
+let aspectRatio = 1;
+let lockRatio = true;
+let currentDownloadUrl = null;
 
-    if (!file) return;
+/* FORMAT SIZE */
+function formatBytes(bytes){
+  if(bytes < 1024){
+    return bytes.toFixed(0) + " B";
+  }
 
-    originalFile = file;
+  if(bytes < 1024 * 1024){
+    return (bytes / 1024).toFixed(2) + " KB";
+  }
 
-    const reader = new FileReader();
+  return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+}
 
-    reader.onload = function (event) {
-        const img = new Image();
+/* ERROR */
+function showError(message){
+  errorBox.textContent = message;
+  errorBox.classList.add("show");
+}
 
-        img.onload = function () {
-            image = img;
-            ratio = img.width / img.height;
+function clearError(){
+  errorBox.textContent = "";
+  errorBox.classList.remove("show");
+}
 
-            widthInput.value = img.width;
-            heightInput.value = img.height;
+/* LOAD FILE */
+function loadFile(file){
 
-            resizeBtn.disabled = false;
-            result.style.display = "none";
-        };
+  clearError();
 
-        img.onerror = function () {
-            alert("This image could not be loaded. Please choose a JPG, PNG or WebP image.");
-        };
+  result.classList.remove("show");
 
-        img.src = event.target.result;
-    };
+  if(currentDownloadUrl){
+    URL.revokeObjectURL(currentDownloadUrl);
+    currentDownloadUrl = null;
+  }
 
-    reader.onerror = function () {
-        alert("Unable to read this image.");
-    };
+  if(!file){
+    return;
+  }
 
-    reader.readAsDataURL(file);
+  const allowed = [
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+  ];
+
+  if(!allowed.includes(file.type)){
+    showError("Please choose a JPG, PNG or WebP image.");
+    return;
+  }
+
+  selectedFile = file;
+
+  const objectUrl = URL.createObjectURL(file);
+
+  const img = new Image();
+
+  img.onload = function(){
+
+    sourceImage = img;
+
+    aspectRatio = img.width / img.height;
+
+    widthInput.value = img.width;
+    heightInput.value = img.height;
+
+    preview.src = objectUrl;
+
+    previewWrap.classList.add("show");
+
+    fileInfo.classList.add("show");
+
+    originalSize.textContent = formatBytes(file.size);
+
+    originalDimensions.textContent =
+      img.width + " × " + img.height;
+
+    originalType.textContent =
+      file.type.replace("image/","").toUpperCase();
+
+    resizeBtn.disabled = false;
+  };
+
+  img.onerror = function(){
+    URL.revokeObjectURL(objectUrl);
+    showError("This image could not be loaded.");
+  };
+
+  img.src = objectUrl;
+}
+
+/* FILE INPUT */
+fileInput.addEventListener("change", function(){
+  if(this.files && this.files[0]){
+    loadFile(this.files[0]);
+  }
 });
 
-widthInput.addEventListener("input", function () {
-    if (lock.checked && image && widthInput.value) {
-        heightInput.value = Math.round(widthInput.value / ratio);
-    }
+/* DRAG AND DROP */
+dropZone.addEventListener("dragover", function(e){
+  e.preventDefault();
+  dropZone.classList.add("dragover");
 });
 
-heightInput.addEventListener("input", function () {
-    if (lock.checked && image && heightInput.value) {
-        widthInput.value = Math.round(heightInput.value * ratio);
-    }
+dropZone.addEventListener("dragleave", function(){
+  dropZone.classList.remove("dragover");
 });
 
-resizeBtn.addEventListener("click", function () {
-    if (!image) return;
+dropZone.addEventListener("drop", function(e){
 
-    const w = parseInt(widthInput.value);
-    const h = parseInt(heightInput.value);
+  e.preventDefault();
 
-    if (!w || !h || w < 1 || h < 1) {
-        alert("Please enter valid dimensions.");
-        return;
-    }
+  dropZone.classList.remove("dragover");
 
-    const canvas = document.createElement("canvas");
-    canvas.width = w;
-    canvas.height = h;
+  if(e.dataTransfer.files && e.dataTransfer.files[0]){
+    loadFile(e.dataTransfer.files[0]);
+  }
+});
 
-    const ctx = canvas.getContext("2d");
+/* LOCK */
+lockBtn.addEventListener("click", function(){
 
-    if (format.value === "image/jpeg") {
+  lockRatio = !lockRatio;
+
+  lockBtn.classList.toggle("active", lockRatio);
+
+  lockBtn.textContent = lockRatio ? "🔒" : "🔓";
+});
+
+/* WIDTH */
+widthInput.addEventListener("input", function(){
+
+  if(!lockRatio || !aspectRatio){
+    return;
+  }
+
+  const width = Number(this.value);
+
+  if(width > 0){
+    heightInput.value =
+      Math.round(width / aspectRatio);
+  }
+});
+
+/* HEIGHT */
+heightInput.addEventListener("input", function(){
+
+  if(!lockRatio || !aspectRatio){
+    return;
+  }
+
+  const height = Number(this.value);
+
+  if(height > 0){
+    widthInput.value =
+      Math.round(height * aspectRatio);
+  }
+});
+
+/* QUALITY */
+qualityInput.addEventListener("input", function(){
+  qualityValue.textContent =
+    qualityInput.value + "%";
+});
+
+/* RESIZE */
+resizeBtn.addEventListener("click", function(){
+
+  clearError();
+
+  if(!selectedFile || !sourceImage){
+    showError("Please select an image first.");
+    return;
+  }
+
+  const targetWidth = Number(widthInput.value);
+  const targetHeight = Number(heightInput.value);
+
+  if(
+    !Number.isFinite(targetWidth) ||
+    !Number.isFinite(targetHeight) ||
+    targetWidth < 1 ||
+    targetHeight < 1
+  ){
+    showError("Please enter valid width and height values.");
+    return;
+  }
+
+  if(targetWidth > 10000 || targetHeight > 10000){
+    showError("Maximum supported dimension is 10,000 pixels.");
+    return;
+  }
+
+  resizeBtn.disabled = true;
+  resizeBtn.textContent = "Resizing...";
+
+  setTimeout(function(){
+
+    try{
+
+      const canvas = document.createElement("canvas");
+
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+
+      const ctx = canvas.getContext("2d");
+
+      if(!ctx){
+        throw new Error("Canvas is not supported.");
+      }
+
+      /*
+       * Better quality image scaling.
+       */
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+
+      /*
+       * White background for JPG because JPG does not support transparency.
+       */
+      if(formatSelect.value === "image/jpeg"){
+
         ctx.fillStyle = "#ffffff";
-        ctx.fillRect(0, 0, w, h);
-    }
 
-    ctx.drawImage(image, 0, 0, w, h);
+        ctx.fillRect(
+          0,
+          0,
+          targetWidth,
+          targetHeight
+        );
+      }
 
-    canvas.toBlob(function (blob) {
-        if (!blob) {
-            alert("Unable to create the resized image.");
-            return;
-        }
+      ctx.drawImage(
+        sourceImage,
+        0,
+        0,
+        targetWidth,
+        targetHeight
+      );
 
-        resizedBlob = blob;
+      const quality =
+        Number(qualityInput.value) / 100;
 
-        document.getElementById("filename").textContent =
-            "Resized image ready";
+      canvas.toBlob(
+        function(blob){
 
-        document.getElementById("originalSize").textContent =
-            formatBytes(originalFile.size);
+          if(!blob){
+            throw new Error("Unable to create output image.");
+          }
 
-        document.getElementById("newSize").textContent =
+          if(currentDownloadUrl){
+            URL.revokeObjectURL(currentDownloadUrl);
+          }
+
+          currentDownloadUrl =
+            URL.createObjectURL(blob);
+
+          let extension = "jpg";
+
+          if(formatSelect.value === "image/png"){
+            extension = "png";
+          }
+
+          if(formatSelect.value === "image/webp"){
+            extension = "webp";
+          }
+
+          const filename =
+            "utilitycanvas-resized-image." + extension;
+
+          downloadBtn.href = currentDownloadUrl;
+          downloadBtn.download = filename;
+
+          outputSize.textContent =
             formatBytes(blob.size);
 
-        document.getElementById("dimensions").textContent =
-            w + " × " + h + " px";
+          outputDimensions.textContent =
+            targetWidth + " × " + targetHeight;
 
-        result.style.display = "block";
-    }, format.value, parseInt(quality.value) / 100);
-});
+          outputFormat.textContent =
+            extension.toUpperCase();
 
-downloadBtn.addEventListener("click", function () {
-    if (!resizedBlob) return;
+          result.classList.add("show");
 
-    const ext =
-        format.value === "image/png" ? "png" :
-        format.value === "image/webp" ? "webp" : "jpg";
+          resizeBtn.disabled = false;
+          resizeBtn.textContent = "Resize Image";
 
-    const url = URL.createObjectURL(resizedBlob);
-    const a = document.createElement("a");
+          result.scrollIntoView({
+            behavior:"smooth",
+            block:"nearest"
+          });
 
-    a.href = url;
-    a.download = "utilitycanvas-resized." + ext;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+        },
+        formatSelect.value,
+        quality
+      );
 
-    setTimeout(function () {
-        URL.revokeObjectURL(url);
-    }, 1000);
-});
+    }catch(error){
 
-resetBtn.addEventListener("click", function () {
-    fileInput.value = "";
-    image = null;
-    originalFile = null;
-    resizedBlob = null;
+      console.error(error);
 
-    resizeBtn.disabled = true;
-    result.style.display = "none";
+      showError(
+        "Something went wrong while resizing the image."
+      );
 
-    widthInput.value = "";
-    heightInput.value = "";
-});
-
-function formatBytes(bytes) {
-    if (bytes < 1024) return bytes + " B";
-
-    if (bytes < 1024 * 1024) {
-        return (bytes / 1024).toFixed(2) + " KB";
+      resizeBtn.disabled = false;
+      resizeBtn.textContent = "Resize Image";
     }
 
-    return (bytes / 1024 / 1024).toFixed(2) + " MB";
-}
+  }, 50);
+});
+
+/* CLEANUP */
+window.addEventListener("beforeunload", function(){
+
+  if(currentDownloadUrl){
+    URL.revokeObjectURL(currentDownloadUrl);
+  }
+});
 </script>
 
 </body>
