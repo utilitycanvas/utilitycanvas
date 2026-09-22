@@ -662,146 +662,353 @@ alert("The image could not be reduced to the requested size.");
 
 return;
 
-}
+<script>
+const fileInput = document.getElementById("file");
+const targetInput = document.getElementById("target");
+const formatInput = document.getElementById("format");
+const resizeBtn = document.getElementById("resize");
+const resetBtn = document.getElementById("reset");
 
-resultBlob = bestBlob;
+const progress = document.getElementById("progress");
+const progressFill = document.getElementById("progressFill");
+const progressText = document.getElementById("progressText");
 
-document.getElementById("originalSize").textContent =
-formatBytes(originalFile.size);
+const result = document.getElementById("result");
+const downloadBtn = document.getElementById("download");
 
-document.getElementById("newSize").textContent =
-formatBytes(bestBlob.size);
+let image = null;
+let originalFile = null;
+let resultBlob = null;
 
-document.getElementById("dimensions").textContent =
-bestWidth + " × " + bestHeight + " px";
+document.querySelectorAll(".preset").forEach(function(button) {
+    button.addEventListener("click", function() {
+        targetInput.value = button.dataset.size;
+    });
+});
 
-const actualKB = bestBlob.size / 1024;
+fileInput.addEventListener("change", function() {
+    const file = this.files && this.files[0];
 
-document.getElementById("note").textContent =
-"Target: " + targetKB.toFixed(0) +
-" KB • Result: " + actualKB.toFixed(2) +
-" KB. The tool keeps the result at or below the requested target.";
+    if (!file) return;
 
-result.style.display = "block";
+    originalFile = file;
 
-resizeBtn.disabled = false;
+    const reader = new FileReader();
 
-setTimeout(function(){
+    reader.onload = function(event) {
+        const img = new Image();
 
-progress.style.display = "none";
+        img.onload = function() {
+            image = img;
+            resizeBtn.disabled = false;
+            result.style.display = "none";
+        };
 
-},500);
+        img.onerror = function() {
+            alert("This image could not be loaded. Please choose a JPG, PNG or WebP image.");
+        };
 
+        img.src = event.target.result;
+    };
+
+    reader.onerror = function() {
+        alert("Unable to read this image.");
+    };
+
+    reader.readAsDataURL(file);
+});
+
+resizeBtn.addEventListener("click", async function() {
+
+    if (!image) return;
+
+    const targetKB = parseFloat(targetInput.value);
+
+    if (!targetKB || targetKB < 5) {
+        alert("Please enter a target size of at least 5 KB.");
+        return;
+    }
+
+    const targetBytes = targetKB * 1024;
+    const outputType = formatInput.value;
+
+    progress.style.display = "block";
+    result.style.display = "none";
+    resizeBtn.disabled = true;
+
+    progressFill.style.width = "5%";
+    progressText.textContent = "Finding the best size...";
+
+    let bestBlob = null;
+    let bestWidth = image.width;
+    let bestHeight = image.height;
+
+    /*
+     * Start at the original dimensions.
+     * If the image is too large even at low quality,
+     * gradually reduce dimensions until we can get close
+     * to the requested file size.
+     */
+
+    let scale = 1;
+
+    for (let attempt = 0; attempt < 30; attempt++) {
+
+        const width = Math.max(1, Math.round(image.width * scale));
+        const height = Math.max(1, Math.round(image.height * scale));
+
+        progressText.textContent =
+            "Testing " + width + " × " + height + " px...";
+
+        progressFill.style.width =
+            Math.min(95, 5 + attempt * 3) + "%";
+
+        /*
+         * PNG does not respond reliably to JPEG-style quality.
+         * For exact KB targeting, JPG/WebP are much more suitable.
+         */
+        if (outputType === "image/png") {
+
+            const pngBlob = await createBlob(
+                width,
+                height,
+                outputType,
+                1
+            );
+
+            if (pngBlob.size <= targetBytes) {
+
+                if (
+                    !bestBlob ||
+                    pngBlob.size > bestBlob.size
+                ) {
+                    bestBlob = pngBlob;
+                    bestWidth = width;
+                    bestHeight = height;
+                }
+
+                break;
+            }
+
+        } else {
+
+            /*
+             * Find the highest quality that stays
+             * at or below the target size.
+             */
+            let low = 0.01;
+            let high = 1;
+            let localBest = null;
+
+            for (let i = 0; i < 12; i++) {
+
+                const quality = (low + high) / 2;
+
+                const blob = await createBlob(
+                    width,
+                    height,
+                    outputType,
+                    quality
+                );
+
+                if (blob.size <= targetBytes) {
+
+                    localBest = blob;
+                    low = quality;
+
+                } else {
+
+                    high = quality;
+                }
+            }
+
+            if (localBest) {
+
+                if (
+                    !bestBlob ||
+                    localBest.size > bestBlob.size
+                ) {
+                    bestBlob = localBest;
+                    bestWidth = width;
+                    bestHeight = height;
+                }
+
+                /*
+                 * If we are already very close to target,
+                 * stop searching.
+                 */
+                if (
+                    localBest.size >= targetBytes * 0.95
+                ) {
+                    break;
+                }
+            }
+        }
+
+        /*
+         * Reduce dimensions gradually.
+         * This preserves much more resolution than the
+         * previous aggressive scaling algorithm.
+         */
+        scale *= 0.92;
+
+        await new Promise(function(resolve) {
+            setTimeout(resolve, 10);
+        });
+    }
+
+    progressFill.style.width = "100%";
+    progressText.textContent = "Finished.";
+
+    if (!bestBlob) {
+
+        progress.style.display = "none";
+        resizeBtn.disabled = false;
+
+        alert(
+            "This target size is too small for this image. " +
+            "Try a larger target such as 20 KB, 50 KB or 100 KB."
+        );
+
+        return;
+    }
+
+    resultBlob = bestBlob;
+
+    document.getElementById("originalSize").textContent =
+        formatBytes(originalFile.size);
+
+    document.getElementById("newSize").textContent =
+        formatBytes(bestBlob.size);
+
+    document.getElementById("dimensions").textContent =
+        bestWidth + " × " + bestHeight + " px";
+
+    const actualKB = bestBlob.size / 1024;
+
+    document.getElementById("note").textContent =
+        "Target: " +
+        targetKB.toFixed(0) +
+        " KB • Result: " +
+        actualKB.toFixed(2) +
+        " KB • Dimensions: " +
+        bestWidth +
+        " × " +
+        bestHeight +
+        " px";
+
+    result.style.display = "block";
+
+    resizeBtn.disabled = false;
+
+    setTimeout(function() {
+        progress.style.display = "none";
+    }, 500);
 });
 
 
-function createBlob(width,height,type,quality){
+function createBlob(width, height, type, quality) {
 
-return new Promise(function(resolve){
+    return new Promise(function(resolve) {
 
-const canvas = document.createElement("canvas");
+        const canvas = document.createElement("canvas");
 
-canvas.width = width;
-canvas.height = height;
+        canvas.width = width;
+        canvas.height = height;
 
-const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d");
 
-if(type === "image/jpeg"){
+        if (type === "image/jpeg") {
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, width, height);
+        }
 
-ctx.fillStyle = "#ffffff";
+        ctx.drawImage(
+            image,
+            0,
+            0,
+            width,
+            height
+        );
 
-ctx.fillRect(0,0,width,height);
-
+        canvas.toBlob(
+            function(blob) {
+                resolve(blob);
+            },
+            type,
+            quality
+        );
+    });
 }
 
-ctx.drawImage(image,0,0,width,height);
 
-canvas.toBlob(function(blob){
+downloadBtn.addEventListener("click", function() {
 
-resolve(blob);
+    if (!resultBlob) return;
 
-},type,quality);
+    const ext =
+        formatInput.value === "image/png"
+            ? "png"
+            : formatInput.value === "image/webp"
+                ? "webp"
+                : "jpg";
 
-});
+    const url = URL.createObjectURL(resultBlob);
 
-}
+    const a = document.createElement("a");
 
+    a.href = url;
 
-downloadBtn.addEventListener("click",function(){
+    a.download =
+        "utilitycanvas-" +
+        (targetInput.value || "resized") +
+        "kb." +
+        ext;
 
-if(!resultBlob) return;
+    document.body.appendChild(a);
 
-const ext =
-formatInput.value === "image/png" ? "png" :
-formatInput.value === "image/webp" ? "webp" : "jpg";
+    a.click();
 
-const url = URL.createObjectURL(resultBlob);
+    a.remove();
 
-const a = document.createElement("a");
-
-a.href = url;
-
-a.download =
-"utilitycanvas-" +
-(targetInput.value || "resized") +
-"kb." + ext;
-
-document.body.appendChild(a);
-
-a.click();
-
-a.remove();
-
-setTimeout(function(){
-
-URL.revokeObjectURL(url);
-
-},1000);
-
-});
-
-
-resetBtn.addEventListener("click",function(){
-
-fileInput.value = "";
-
-image = null;
-
-originalFile = null;
-
-resultBlob = null;
-
-resizeBtn.disabled = true;
-
-result.style.display = "none";
-
-progress.style.display = "none";
-
-progressFill.style.width = "0%";
-
-targetInput.value = "100";
-
+    setTimeout(function() {
+        URL.revokeObjectURL(url);
+    }, 1000);
 });
 
 
-function formatBytes(bytes){
+resetBtn.addEventListener("click", function() {
 
-if(bytes < 1024){
+    fileInput.value = "";
 
-return bytes + " B";
+    image = null;
+    originalFile = null;
+    resultBlob = null;
 
+    resizeBtn.disabled = true;
+
+    result.style.display = "none";
+
+    progress.style.display = "none";
+
+    progressFill.style.width = "0%";
+
+    targetInput.value = "100";
+});
+
+
+function formatBytes(bytes) {
+
+    if (bytes < 1024) {
+        return bytes + " B";
+    }
+
+    if (bytes < 1024 * 1024) {
+        return (bytes / 1024).toFixed(2) + " KB";
+    }
+
+    return (bytes / 1024 / 1024).toFixed(2) + " MB";
 }
-
-if(bytes < 1024 * 1024){
-
-return (bytes / 1024).toFixed(2) + " KB";
-
-}
-
-return (bytes / 1024 / 1024).toFixed(2) + " MB";
-
-}
-
 </script>
 
 </body>
