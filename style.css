@@ -22,16 +22,14 @@ body{
   margin:0;
   color:var(--text);
   font-family:Arial,Helvetica,sans-serif;
-  background:
-    linear-gradient(
-      rgba(244,248,253,.88),
-      rgba(244,248,253,.94)
-    ),
-    url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2400&q=80")
-    center/cover fixed no-repeat;
-  line-height:1.6;
-}
-
+background:
+  linear-gradient(
+    rgba(244,248,253,.82),
+    rgba(244,248,253,.90)
+  ),
+  url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2400&q=80")
+  center/cover fixed no-repeat !important;
+  
 /* Header */
 
 header{
