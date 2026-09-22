@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<meta name="description" content="Free YouTube thumbnail resizer. Resize images to YouTube thumbnail dimensions directly in your browser.">
+
+<title>YouTube Thumbnail Resizer - UtilityCanvas</title>
+
+<style>
+*{
+box-sizing:border-box;
+margin:0;
+padding:0
+}
+
+body{
+font-family:Arial,Helvetica,sans-serif;
+background:#f7f8fc;
+color:#172033;
+line-height:1.6
+}
+
+a{
+text-decoration:none;
+color:inherit
+}
+
+.container{
+width:min(900px,92%);
+margin:auto
+}
+
+header{
+background:#fff;
+border-bottom:1px solid #e8eaf0
+}
+
+.nav{
+min-height:70px;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.logo{
+font-size:24px;
+font-weight:800
+}
+
+.logo span{
+color:#635bff
+}
+
+.nav-links{
+display:flex;
+gap:25px;
+font-size:14px;
+color:#596273
+}
+
+.hero{
+padding:60px 0 35px;
+text-align:center;
+background:linear-gradient(180deg,#fff 0%,#f7f8fc 100%)
+}
+
+.hero h1{
+font-size:40px;
+line-height:1.15
+}
+
+.hero h1 span{
+color:#635bff
+}
+
+.hero p{
+max-width:700px;
+margin:18px auto;
+color:#687083
+}
+
+.tool-box{
+background:#fff;
+border:1px solid #e4e7ef;
+border-radius:18px;
+padding:25px;
+margin:25px auto 70px;
+box-shadow:0 8px 30px rgba(20,30,60,.05)
+}
+
+.drop{
+border:2px dashed #d5d8e8;
+border-radius:14px;
+padding:45px 20px;
+text-align:center;
+background:#fafaff
+}
+
+.drop strong{
+display:block;
+font-size:17px;
+margin-bottom:6px
+}
+
+.drop small{
+color:#7b8495
+}
+
+.file-input{
+display:block;
+width:100%;
+margin-top:18px;
+padding:10px;
+border:1px solid #dfe2eb;
+border-radius:9px;
+background:#fff
+}
+
+.preview{
+display:none;
+margin-top:20px;
+padding:15px;
+background:#f1f3f8;
+border-radius:14px;
+text-align:center
+}
+
+.preview canvas{
+display:block;
+width:100%;
+max-width:700px;
+height:auto;
+margin:auto;
+border-radius:8px
+}
+
+.controls{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+margin-top:20px
+}
+
+.field label{
+display:block;
+font-size:13px;
+font-weight:700;
+margin-bottom:7px
+}
+
+.field input,
+.field select{
+width:100%;
+padding:12px;
+border:1px solid #dfe2eb;
+border-radius:9px;
+font-size:15px;
+background:#fff
+}
+
+.presets{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:10px
+}
+
+.preset{
+border:0;
+border-radius:9px;
+padding:12px 8px;
+background:#eef0f7;
+color:#30384a;
+font-weight:700;
+cursor:pointer;
+text-align:center
+}
+
+.preset.active{
+background:#dddfff;
+color:#3833a8
+}
+
+.actions{
+display:flex;
+gap:10px;
+margin-top:20px;
+flex-wrap:wrap
+}
+
+button{
+border:0;
+border-radius:9px;
+padding:12px 18px;
+background:#635bff;
+color:#fff;
+font-weight:700;
+cursor:pointer
+}
+
+button.secondary{
+background:#eef0f7;
+color:#30384a
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed
+}
+
+.result{
+display:none;
+margin-top:20px;
+padding:18px;
+background:#f8f9fd;
+border-radius:12px
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:15px
+}
+
+.stat{
+background:#fff;
+padding:15px;
+border-radius:10px;
+text-align:center
+}
+
+.stat strong{
+display:block;
+font-size:18px
+}
+
+.stat small{
+color:#7b8495
+}
+
+.info{
+padding:50px 0;
+background:#fff
+}
+
+.info h2{
+text-align:center;
+margin-bottom:12px
+}
+
+.info p{
+color:#687083;
+max-width:760px;
+margin:10px auto
+}
+
+@media(max-width:650px){
+
+.hero h1{
+font-size:33px
+}
+
+.controls{
+grid-template-columns:1fr
+}
+
+.presets{
+grid-template-columns:1fr
+}
+
+.stats{
+grid-template-columns:1fr
+}
+
+.nav-links{
+gap:12px;
+font-size:12px
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="container nav">
+
+<a href="index.html" class="logo">
+Utility<span>Canvas</span>
+</a>
+
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="index.html#tools">Tools</a>
+<a href="index.html#about">About</a>
+</div>
+
+</div>
+</header>
+
+<section class="hero">
+
+<div class="container">
+
+<h1>
+YouTube <span>Thumbnail Resizer</span>
+</h1>
+
+<p>
+Resize your image to a YouTube thumbnail size directly in your browser.
+</p>
+
+</div>
+
+</section>
+
+<main class="container">
+
+<div class="tool-box">
+
+<div class="drop">
+
+<strong>📁 Choose an image</strong>
+
+<small>
+JPG, PNG or WebP • Your image stays in your browser
+</small>
+
+<input
+id="file"
+class="file-input"
+type="file"
+accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+>
+
+</div>
+
+
+<div class="preview" id="previewBox">
+
+<canvas id="preview"></canvas>
+
+</div>
+
+
+<div class="field">
+
+<label>
+YouTube thumbnail size
+</label>
+
+<div class="presets">
+
+<button
+type="button"
+class="preset active"
+data-width="1280"
+data-height="720"
+>
+1280 × 720
+</button>
+
+<button
+type="button"
+class="preset"
+data-width="1920"
+data-height="1080"
+>
+1920 × 1080
+</button>
+
+<button
+type="button"
+class="preset"
+data-width="3840"
+data-height="2160"
+>
+3840 × 2160
+</button>
+
+</div>
+
+</div>
+
+
+<div class="controls">
+
+<div class="field">
+
+<label>
+Width (px)
+</label>
+
+<input
+id="width"
+type="number"
+min="1"
+value="1280"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+Height (px)
+</label>
+
+<input
+id="height"
+type="number"
+min="1"
+value="720"
+>
+
+</div>
+
+</div>
+
+
+<div class="field">
+
+<label>
+Output format
+</label>
+
+<select id="format">
+
+<option value="image/jpeg">
+JPG
+</option>
+
+<option value="image/png">
+PNG
+</option>
+
+<option value="image/webp">
+WebP
+</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>
+Quality
+</label>
+
+<input
+id="quality"
+type="number"
+min="10"
+max="100"
+value="90"
+>
+
+</div>
+
+
+<div class="actions">
+
+<button
+id="resize"
+disabled
+>
+Resize Thumbnail
+</button>
+
+<button
+id="reset"
+class="secondary"
+>
+Reset
+</button>
+
+</div>
+
+
+<div class="result" id="result">
+
+<strong>
+YouTube thumbnail ready
+</strong>
+
+<div class="stats">
+
+<div class="stat">
+
+<strong id="originalSize">
+—
+</strong>
+
+<small>
+Original
+</small>
+
+</div>
+
+<div class="stat">
+
+<strong id="newSize">
+—
+</strong>
+
+<small>
+Output
+</small>
+
+</div>
+
+<div class="stat">
+
+<strong id="dimensions">
+—
+</strong>
+
+<small>
+Dimensions
+</small>
+
+</div>
+
+</div>
+
+
+<div class="actions">
+
+<button id="download">
+Download Thumbnail
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+
+<section class="info">
+
+<div class="container">
+
+<h2>
+Create YouTube-ready thumbnails
+</h2>
+
+<p>
+Resize images to common YouTube thumbnail dimensions including 1280 × 720, 1920 × 1080 and 3840 × 2160.
+</p>
+
+<p>
+The image is processed directly in your browser. It does not need to be uploaded to a server.
+</p>
+
+</div>
+
+</section>
+
+
+<script>
+
+const fileInput =
+document.getElementById("file");
+
+const previewBox =
+document.getElementById("previewBox");
+
+const canvas =
+document.getElementById("preview");
+
+const ctx =
+canvas.getContext("2d");
+
+const widthInput =
+document.getElementById("width");
+
+const heightInput =
+document.getElementById("height");
+
+const format =
+document.getElementById("format");
+
+const quality =
+document.getElementById("quality");
+
+const resizeBtn =
+document.getElementById("resize");
+
+const resetBtn =
+document.getElementById("reset");
+
+const result =
+document.getElementById("result");
+
+const downloadBtn =
+document.getElementById("download");
+
+let image = null;
+
+let originalFile = null;
+
+let outputBlob = null;
+
+
+/* LOAD IMAGE */
+
+fileInput.addEventListener(
+"change",
+function(){
+
+const file =
+this.files && this.files[0];
+
+if(!file){
+return;
+}
+
+if(
+file.type !== "image/jpeg" &&
+file.type !== "image/png" &&
+file.type !== "image/webp"
+){
+
+alert(
+"Please choose a JPG, PNG or WebP image."
+);
+
+this.value = "";
+
+return;
+}
+
+originalFile = file;
+
+const reader =
+new FileReader();
+
+reader.onload =
+function(event){
+
+const img =
+new Image();
+
+img.onload =
+function(){
+
+image = img;
+
+resizeBtn.disabled =
+false;
+
+result.style.display =
+"none";
+
+drawPreview();
+
+};
+
+img.onerror =
+function(){
+
+alert(
+"This image could not be loaded."
+);
+
+};
+
+img.src =
+event.target.result;
+
+};
+
+reader.onerror =
+function(){
+
+alert(
+"Unable to read this image."
+);
+
+};
+
+reader.readAsDataURL(file);
+
+});
+
+
+/* PRESETS */
+
+document.querySelectorAll(
+".preset"
+).forEach(function(button){
+
+button.addEventListener(
+"click",
+function(){
+
+document.querySelectorAll(
+".preset"
+).forEach(function(item){
+
+item.classList.remove(
+"active"
+);
+
+});
+
+button.classList.add(
+"active"
+);
+
+widthInput.value =
+button.dataset.width;
+
+heightInput.value =
+button.dataset.height;
+
+if(image){
+drawPreview();
+}
+
+});
+
+});
+
+
+/* CUSTOM DIMENSIONS */
+
+widthInput.addEventListener(
+"input",
+function(){
+
+document.querySelectorAll(
+".preset"
+).forEach(function(item){
+
+item.classList.remove(
+"active"
+);
+
+});
+
+if(image){
+drawPreview();
+}
+
+});
+
+heightInput.addEventListener(
+"input",
+function(){
+
+document.querySelectorAll(
+".preset"
+).forEach(function(item){
+
+item.classList.remove(
+"active"
+);
+
+});
+
+if(image){
+drawPreview();
+}
+
+});
+
+
+/* PREVIEW */
+
+function drawPreview(){
+
+if(!image){
+return;
+}
+
+const w =
+parseInt(widthInput.value) || 1280;
+
+const h =
+parseInt(heightInput.value) || 720;
+
+if(w < 1 || h < 1){
+return;
+}
+
+const maxWidth = 800;
+
+const scale =
+Math.min(
+1,
+maxWidth / w
+);
+
+canvas.width =
+Math.round(w * scale);
+
+canvas.height =
+Math.round(h * scale);
+
+ctx.fillStyle =
+"#ffffff";
+
+ctx.fillRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+const imageRatio =
+image.naturalWidth /
+image.naturalHeight;
+
+const targetRatio =
+w / h;
+
+let drawWidth =
+canvas.width;
+
+let drawHeight =
+canvas.height;
+
+let offsetX = 0;
+
+let offsetY = 0;
+
+
+/*
+Cover the thumbnail area
+without stretching the image.
+*/
+
+if(imageRatio > targetRatio){
+
+drawHeight =
+canvas.height;
+
+drawWidth =
+drawHeight * imageRatio;
+
+offsetX =
+(canvas.width - drawWidth) / 2;
+
+}
+else{
+
+drawWidth =
+canvas.width;
+
+drawHeight =
+drawWidth / imageRatio;
+
+offsetY =
+(canvas.height - drawHeight) / 2;
+
+}
+
+ctx.drawImage(
+image,
+offsetX,
+offsetY,
+drawWidth,
+drawHeight
+);
+
+previewBox.style.display =
+"block";
+
+}
+
+
+/* RESIZE */
+
+resizeBtn.addEventListener(
+"click",
+function(){
+
+if(!image){
+return;
+}
+
+const w =
+parseInt(widthInput.value);
+
+const h =
+parseInt(heightInput.value);
+
+if(
+!w ||
+!h ||
+w < 1 ||
+h < 1
+){
+
+alert(
+"Please enter valid dimensions."
+);
+
+return;
+}
+
+const output =
+document.createElement(
+"canvas"
+);
+
+output.width = w;
+
+output.height = h;
+
+const outputCtx =
+output.getContext("2d");
+
+
+outputCtx.fillStyle =
+"#ffffff";
+
+outputCtx.fillRect(
+0,
+0,
+w,
+h
+);
+
+
+const imageRatio =
+image.naturalWidth /
+image.naturalHeight;
+
+const targetRatio =
+w / h;
+
+let drawWidth = w;
+
+let drawHeight = h;
+
+let offsetX = 0;
+
+let offsetY = 0;
+
+
+/*
+Cover output canvas
+without distortion.
+*/
+
+if(imageRatio > targetRatio){
+
+drawHeight = h;
+
+drawWidth =
+h * imageRatio;
+
+offsetX =
+(w - drawWidth) / 2;
+
+}
+else{
+
+drawWidth = w;
+
+drawHeight =
+w / imageRatio;
+
+offsetY =
+(h - drawHeight) / 2;
+
+}
+
+
+outputCtx.drawImage(
+image,
+offsetX,
+offsetY,
+drawWidth,
+drawHeight
+);
+
+
+let selectedQuality =
+parseInt(quality.value) || 90;
+
+selectedQuality =
+Math.max(
+10,
+Math.min(
+100,
+selectedQuality
+)
+);
+
+
+const finalQuality =
+format.value ===
+"image/png"
+? undefined
+: selectedQuality / 100;
+
+
+output.toBlob(
+function(blob){
+
+if(!blob){
+
+alert(
+"Unable to create the thumbnail."
+);
+
+return;
+}
+
+outputBlob =
+blob;
+
+
+document.getElementById(
+"originalSize"
+).textContent =
+formatBytes(
+originalFile.size
+);
+
+document.getElementById(
+"newSize"
+).textContent =
+formatBytes(
+blob.size
+);
+
+document.getElementById(
+"dimensions"
+).textContent =
+w +
+" × " +
+h +
+" px";
+
+result.style.display =
+"block";
+
+},
+format.value,
+finalQuality
+);
+
+});
+
+
+/* DOWNLOAD */
+
+downloadBtn.addEventListener(
+"click",
+function(){
+
+if(!outputBlob){
+return;
+}
+
+let extension =
+"jpg";
+
+if(format.value ===
+"image/png"){
+
+extension =
+"png";
+
+}
+
+if(format.value ===
+"image/webp"){
+
+extension =
+"webp";
+
+}
+
+const url =
+URL.createObjectURL(
+outputBlob
+);
+
+const link =
+document.createElement("a");
+
+link.href =
+url;
+
+link.download =
+"utilitycanvas-youtube-thumbnail." +
+extension;
+
+document.body.appendChild(
+link
+);
+
+link.click();
+
+link.remove();
+
+setTimeout(
+function(){
+
+URL.revokeObjectURL(
+url
+);
+
+},
+1000
+);
+
+});
+
+
+/* RESET */
+
+resetBtn.addEventListener(
+"click",
+function(){
+
+fileInput.value = "";
+
+image = null;
+
+originalFile = null;
+
+outputBlob = null;
+
+previewBox.style.display =
+"none";
+
+result.style.display =
+"none";
+
+resizeBtn.disabled =
+true;
+
+widthInput.value =
+1280;
+
+heightInput.value =
+720;
+
+document.querySelectorAll(
+".preset"
+).forEach(function(item){
+
+item.classList.remove(
+"active"
+);
+
+});
+
+document.querySelector(
+'.preset[data-width="1280"]'
+).classList.add(
+"active"
+);
+
+});
+
+
+/* BYTES */
+
+function formatBytes(bytes){
+
+if(bytes < 1024){
+
+return bytes + " B";
+
+}
+
+if(bytes <
+1024 * 1024){
+
+return (
+bytes / 1024
+).toFixed(2) +
+" KB";
+
+}
+
+return (
+bytes /
+1024 /
+1024
+).toFixed(2) +
+" MB";
+
+}
+
+</script>
+
+</body>
+</html>
