@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<meta name="description" content="Free online image converter. Convert JPG, PNG and WebP images directly in your browser.">
+
+<title>Image Converter - UtilityCanvas</title>
+
+<style>
+*{
+box-sizing:border-box;
+margin:0;
+padding:0
+}
+
+body{
+font-family:Arial,Helvetica,sans-serif;
+background:#f7f8fc;
+color:#172033;
+line-height:1.6
+}
+
+a{
+text-decoration:none;
+color:inherit
+}
+
+.container{
+width:min(900px,92%);
+margin:auto
+}
+
+header{
+background:#fff;
+border-bottom:1px solid #e8eaf0
+}
+
+.nav{
+min-height:70px;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.logo{
+font-size:24px;
+font-weight:800
+}
+
+.logo span{
+color:#635bff
+}
+
+.nav-links{
+display:flex;
+gap:25px;
+font-size:14px;
+color:#596273
+}
+
+.hero{
+padding:60px 0 35px;
+text-align:center;
+background:linear-gradient(180deg,#fff 0%,#f7f8fc 100%)
+}
+
+.hero h1{
+font-size:40px;
+line-height:1.15
+}
+
+.hero h1 span{
+color:#635bff
+}
+
+.hero p{
+max-width:700px;
+margin:18px auto;
+color:#687083
+}
+
+.tool-box{
+background:#fff;
+border:1px solid #e4e7ef;
+border-radius:18px;
+padding:25px;
+margin:25px auto 70px;
+box-shadow:0 8px 30px rgba(20,30,60,.05)
+}
+
+.drop{
+border:2px dashed #d5d8e8;
+border-radius:14px;
+padding:45px 20px;
+text-align:center;
+background:#fafaff
+}
+
+.drop strong{
+display:block;
+font-size:17px;
+margin-bottom:6px
+}
+
+.drop small{
+color:#7b8495
+}
+
+.file-input{
+display:block;
+width:100%;
+margin-top:18px;
+padding:10px;
+border:1px solid #dfe2eb;
+border-radius:9px;
+background:#fff
+}
+
+.preview{
+display:none;
+margin-top:20px;
+text-align:center;
+background:#f1f3f8;
+border-radius:14px;
+padding:15px
+}
+
+.preview img{
+display:block;
+max-width:100%;
+max-height:450px;
+margin:auto;
+border-radius:8px
+}
+
+.field{
+margin-top:20px
+}
+
+.field label{
+display:block;
+font-size:13px;
+font-weight:700;
+margin-bottom:7px
+}
+
+.field select{
+width:100%;
+padding:13px;
+border:1px solid #dfe2eb;
+border-radius:9px;
+font-size:15px;
+background:#fff
+}
+
+.actions{
+display:flex;
+gap:10px;
+margin-top:20px;
+flex-wrap:wrap
+}
+
+button{
+border:0;
+border-radius:9px;
+padding:12px 18px;
+background:#635bff;
+color:white;
+font-weight:700;
+cursor:pointer
+}
+
+button.secondary{
+background:#eef0f7;
+color:#30384a
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed
+}
+
+.result{
+margin-top:20px;
+padding:18px;
+background:#f8f9fd;
+border-radius:12px;
+display:none
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:15px
+}
+
+.stat{
+background:#fff;
+padding:15px;
+border-radius:10px;
+text-align:center
+}
+
+.stat strong{
+display:block;
+font-size:18px
+}
+
+.stat small{
+color:#7b8495
+}
+
+.info{
+padding:50px 0;
+background:#fff
+}
+
+.info h2{
+text-align:center;
+margin-bottom:12px
+}
+
+.info p{
+color:#687083;
+max-width:760px;
+margin:10px auto
+}
+
+@media(max-width:650px){
+
+.hero h1{
+font-size:33px
+}
+
+.stats{
+grid-template-columns:1fr
+}
+
+.nav-links{
+gap:12px;
+font-size:12px
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="container nav">
+
+<a href="index.html" class="logo">
+Utility<span>Canvas</span>
+</a>
+
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="index.html#tools">Tools</a>
+<a href="index.html#about">About</a>
+</div>
+
+</div>
+</header>
+
+<section class="hero">
+
+<div class="container">
+
+<h1>
+Free <span>Image Converter</span>
+</h1>
+
+<p>
+Convert JPG, PNG and WebP images directly in your browser.
+</p>
+
+</div>
+
+</section>
+
+<main class="container">
+
+<div class="tool-box">
+
+<div class="drop">
+
+<strong>📁 Choose an image</strong>
+
+<small>
+JPG, PNG or WebP • Your image stays in your browser
+</small>
+
+<input
+id="file"
+class="file-input"
+type="file"
+accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+>
+
+</div>
+
+
+<div class="preview" id="previewBox">
+
+<img id="previewImage" alt="Image preview">
+
+</div>
+
+
+<div class="field">
+
+<label>
+Convert to
+</label>
+
+<select id="format">
+
+<option value="image/jpeg">
+JPG
+</option>
+
+<option value="image/png">
+PNG
+</option>
+
+<option value="image/webp">
+WebP
+</option>
+
+</select>
+
+</div>
+
+
+<div class="actions">
+
+<button id="convert" disabled>
+Convert Image
+</button>
+
+<button id="reset" class="secondary">
+Reset
+</button>
+
+</div>
+
+
+<div class="result" id="result">
+
+<strong>
+Converted image ready
+</strong>
+
+<div class="stats">
+
+<div class="stat">
+
+<strong id="originalSize">
+—
+</strong>
+
+<small>
+Original
+</small>
+
+</div>
+
+<div class="stat">
+
+<strong id="newSize">
+—
+</strong>
+
+<small>
+Converted
+</small>
+
+</div>
+
+<div class="stat">
+
+<strong id="dimensions">
+—
+</strong>
+
+<small>
+Dimensions
+</small>
+
+</div>
+
+</div>
+
+
+<div class="actions">
+
+<button id="download">
+Download Image
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+
+<section class="info">
+
+<div class="container">
+
+<h2>
+Convert images quickly and privately
+</h2>
+
+<p>
+Convert JPG, PNG and WebP images without uploading them to a server.
+</p>
+
+<p>
+All processing happens directly in your browser, making the tool simple and privacy-friendly.
+</p>
+
+</div>
+
+</section>
+
+
+<script>
+
+const fileInput =
+document.getElementById("file");
+
+const previewBox =
+document.getElementById("previewBox");
+
+const previewImage =
+document.getElementById("previewImage");
+
+const format =
+document.getElementById("format");
+
+const convertBtn =
+document.getElementById("convert");
+
+const resetBtn =
+document.getElementById("reset");
+
+const result =
+document.getElementById("result");
+
+const downloadBtn =
+document.getElementById("download");
+
+let image = null;
+
+let originalFile = null;
+
+let convertedBlob = null;
+
+
+/* =========================
+   LOAD IMAGE
+========================= */
+
+fileInput.addEventListener(
+"change",
+function(){
+
+const file =
+this.files && this.files[0];
+
+if(!file){
+return;
+}
+
+if(
+file.type !== "image/jpeg" &&
+file.type !== "image/png" &&
+file.type !== "image/webp"
+){
+
+alert(
+"Please choose a JPG, PNG or WebP image."
+);
+
+fileInput.value = "";
+
+return;
+
+}
+
+originalFile = file;
+
+const reader =
+new FileReader();
+
+reader.onload =
+function(event){
+
+const img =
+new Image();
+
+img.onload =
+function(){
+
+image = img;
+
+previewImage.src =
+event.target.result;
+
+previewBox.style.display =
+"block";
+
+convertBtn.disabled =
+false;
+
+result.style.display =
+"none";
+
+};
+
+img.onerror =
+function(){
+
+alert(
+"This image could not be loaded."
+);
+
+};
+
+img.src =
+event.target.result;
+
+};
+
+reader.onerror =
+function(){
+
+alert(
+"Unable to read this image."
+);
+
+};
+
+reader.readAsDataURL(file);
+
+});
+
+
+/* =========================
+   CONVERT
+========================= */
+
+convertBtn.addEventListener(
+"click",
+function(){
+
+if(!image){
+return;
+}
+
+const canvas =
+document.createElement("canvas");
+
+canvas.width =
+image.naturalWidth;
+
+canvas.height =
+image.naturalHeight;
+
+const ctx =
+canvas.getContext("2d");
+
+
+/*
+ JPG does not support transparency.
+ Use white background.
+*/
+
+if(format.value === "image/jpeg"){
+
+ctx.fillStyle =
+"#ffffff";
+
+ctx.fillRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+}
+
+
+ctx.drawImage(
+image,
+0,
+0
+);
+
+
+let quality = 0.92;
+
+if(format.value === "image/png"){
+quality = undefined;
+}
+
+
+canvas.toBlob(
+function(blob){
+
+if(!blob){
+
+alert(
+"Unable to convert this image."
+);
+
+return;
+
+}
+
+convertedBlob =
+blob;
+
+
+document.getElementById(
+"originalSize"
+).textContent =
+formatBytes(
+originalFile.size
+);
+
+
+document.getElementById(
+"newSize"
+).textContent =
+formatBytes(
+blob.size
+);
+
+
+document.getElementById(
+"dimensions"
+).textContent =
+image.naturalWidth +
+" × " +
+image.naturalHeight +
+" px";
+
+
+result.style.display =
+"block";
+
+},
+format.value,
+quality
+);
+
+});
+
+
+/* =========================
+   DOWNLOAD
+========================= */
+
+downloadBtn.addEventListener(
+"click",
+function(){
+
+if(!convertedBlob){
+return;
+}
+
+let extension =
+"jpg";
+
+if(format.value === "image/png"){
+extension = "png";
+}
+
+if(format.value === "image/webp"){
+extension = "webp";
+}
+
+
+const url =
+URL.createObjectURL(
+convertedBlob
+);
+
+const link =
+document.createElement("a");
+
+link.href = url;
+
+link.download =
+"utilitycanvas-converted." +
+extension;
+
+document.body.appendChild(link);
+
+link.click();
+
+link.remove();
+
+
+setTimeout(
+function(){
+
+URL.revokeObjectURL(url);
+
+},
+1000
+);
+
+});
+
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+"click",
+function(){
+
+fileInput.value = "";
+
+image = null;
+
+originalFile = null;
+
+convertedBlob = null;
+
+previewImage.removeAttribute(
+"src"
+);
+
+previewBox.style.display =
+"none";
+
+result.style.display =
+"none";
+
+convertBtn.disabled =
+true;
+
+});
+
+
+/* =========================
+   FORMAT BYTES
+========================= */
+
+function formatBytes(bytes){
+
+if(bytes < 1024){
+
+return bytes + " B";
+
+}
+
+if(bytes < 1024 * 1024){
+
+return (
+bytes / 1024
+).toFixed(2) + " KB";
+
+}
+
+return (
+bytes / 1024 / 1024
+).toFixed(2) + " MB";
+
+}
+
+</script>
+
+</body>
+</html>
